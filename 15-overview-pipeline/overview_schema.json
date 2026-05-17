@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "description": "全国 overview PMTiles（3段グリッド・データ分布目安）",
+  "sokuti": "2011",
+  "output_pmtiles": "pmtiles/overview/測地成果2011_national.pmtiles",
+  "tmp_gpkg": "_tmp/overview_grid.gpkg",
+  "max_pmtiles_bytes": 10485760,
+  "target_total_cells_min": 12000,
+  "target_total_cells_max": 28000,
+  "candidate_cell_deg": [0.5, 0.35, 0.2, 0.12, 0.08, 0.04, 0.03],
+  "grid_levels": [
+    {
+      "level": 1,
+      "cell_deg": 0.35,
+      "minzoom": 0,
+      "maxzoom": 7,
+      "layer_name": "overview_L1"
+    },
+    {
+      "level": 2,
+      "cell_deg": 0.12,
+      "minzoom": 8,
+      "maxzoom": 11,
+      "layer_name": "overview_L2"
+    },
+    {
+      "level": 3,
+      "cell_deg": 0.04,
+      "minzoom": 12,
+      "maxzoom": 14,
+      "layer_name": "overview_L3"
+    }
+  ],
+  "overview_zoom": { "minzoom": 0, "maxzoom": 14 }
+}

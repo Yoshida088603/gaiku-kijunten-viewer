@@ -1,0 +1,15 @@
+{
+  "detailMinScale": 11954,
+  "downloadMinScale": 2988,
+  "detailMinZoom": 16,
+  "downloadMinZoom": 17,
+  "overviewMaxZoom": 17,
+  "dataBaseUrl": "./data/",
+  "gsiStdUrl": "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
+  "gsiAttribution": "地理院タイル（国土地理院）",
+  "defaultCenter": [139.75, 35.68],
+  "defaultZoom": 5,
+  "defaultZone": 9,
+  "detailSourceLayer": "kijyunten",
+  "csvColumns": ["id", "name", "x", "y", "z", "kind", "sokuti", "zone", "epsg", "yohosei"]
+}

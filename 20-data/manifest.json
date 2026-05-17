@@ -1,0 +1,200 @@
+{
+  "generated_at": "2026-05-17T08:04:45.545287+00:00",
+  "dev_allow_non_344": false,
+  "qgis_bin": "C:\\Program Files\\QGIS 3.44.9\\bin",
+  "input_dir": "C:\\Users\\Shiro\\Desktop\\国土交通省\\20260219昨年納品DVD\\05ホームページ公開用データ及びプログラム\\20_output\\60-csv2geopackage",
+  "output_dir": "C:\\Users\\Shiro\\Desktop\\国土交通省\\20260219昨年納品DVD\\05ホームページ公開用データ及びプログラム\\10_pipeline\\70-maplibre\\gaiku-kijunten-viewer\\20-data",
+  "layers": [
+    {
+      "gpkg": "測地成果2011_zone01.gpkg",
+      "pmtiles": "sokuchiseika2011_zone01.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone01.pmtiles",
+      "bytes": 4516699,
+      "zone": 1,
+      "sokuti": "2011",
+      "epsg": 6669,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone02.gpkg",
+      "pmtiles": "sokuchiseika2011_zone02.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone02.pmtiles",
+      "bytes": 34195221,
+      "zone": 2,
+      "sokuti": "2011",
+      "epsg": 6670,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone03.gpkg",
+      "pmtiles": "sokuchiseika2011_zone03.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone03.pmtiles",
+      "bytes": 18207314,
+      "zone": 3,
+      "sokuti": "2011",
+      "epsg": 6671,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone04.gpkg",
+      "pmtiles": "sokuchiseika2011_zone04.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone04.pmtiles",
+      "bytes": 10964848,
+      "zone": 4,
+      "sokuti": "2011",
+      "epsg": 6672,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone05.gpkg",
+      "pmtiles": "sokuchiseika2011_zone05.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone05.pmtiles",
+      "bytes": 21864042,
+      "zone": 5,
+      "sokuti": "2011",
+      "epsg": 6673,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone06.gpkg",
+      "pmtiles": "sokuchiseika2011_zone06.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone06.pmtiles",
+      "bytes": 60794586,
+      "zone": 6,
+      "sokuti": "2011",
+      "epsg": 6674,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone07.gpkg",
+      "pmtiles": "sokuchiseika2011_zone07.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone07.pmtiles",
+      "bytes": 49891859,
+      "zone": 7,
+      "sokuti": "2011",
+      "epsg": 6675,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone08.gpkg",
+      "pmtiles": "sokuchiseika2011_zone08.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone08.pmtiles",
+      "bytes": 32839585,
+      "zone": 8,
+      "sokuti": "2011",
+      "epsg": 6676,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone09.gpkg",
+      "pmtiles": "sokuchiseika2011_zone09.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone09.pmtiles",
+      "bytes": 86101418,
+      "zone": 9,
+      "sokuti": "2011",
+      "epsg": 6677,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone10.gpkg",
+      "pmtiles": "sokuchiseika2011_zone10.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone10.pmtiles",
+      "bytes": 15617294,
+      "zone": 10,
+      "sokuti": "2011",
+      "epsg": 6678,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone11.gpkg",
+      "pmtiles": "sokuchiseika2011_zone11.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone11.pmtiles",
+      "bytes": 2210093,
+      "zone": 11,
+      "sokuti": "2011",
+      "epsg": 6679,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone12.gpkg",
+      "pmtiles": "sokuchiseika2011_zone12.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone12.pmtiles",
+      "bytes": 12559164,
+      "zone": 12,
+      "sokuti": "2011",
+      "epsg": 6680,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone13.gpkg",
+      "pmtiles": "sokuchiseika2011_zone13.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone13.pmtiles",
+      "bytes": 3512933,
+      "zone": 13,
+      "sokuti": "2011",
+      "epsg": 6681,
+      "csv_prefix": null,
+      "split": false
+    },
+    {
+      "gpkg": "測地成果2011_zone15.gpkg",
+      "pmtiles": "sokuchiseika2011_zone15.pmtiles",
+      "path": "pmtiles/detail/sokuchiseika2011_zone15.pmtiles",
+      "bytes": 484253,
+      "zone": 15,
+      "sokuti": "2011",
+      "epsg": 6683,
+      "csv_prefix": null,
+      "split": false
+    }
+  ],
+  "errors": [],
+  "overview": {
+    "generated_at": "2026-05-17T08:26:04.064968+00:00",
+    "pmtiles": "sokuchiseika2011_overview.pmtiles",
+    "path": "pmtiles/overview/sokuchiseika2011_overview.pmtiles",
+    "bytes": 1489402,
+    "minzoom": 0,
+    "maxzoom": 14,
+    "feature_count": 3822,
+    "grid_levels": [
+      {
+        "level": 1,
+        "cell_deg": 0.35,
+        "minzoom": 0,
+        "maxzoom": 7,
+        "layer_name": "overview_L1",
+        "cells": 274
+      },
+      {
+        "level": 2,
+        "cell_deg": 0.12,
+        "minzoom": 8,
+        "maxzoom": 11,
+        "layer_name": "overview_L2",
+        "cells": 801
+      },
+      {
+        "level": 3,
+        "cell_deg": 0.04,
+        "minzoom": 12,
+        "maxzoom": 14,
+        "layer_name": "overview_L3",
+        "cells": 2747
+      }
+    ],
+    "qgis_bin": "C:\\Program Files\\QGIS 3.44.9\\bin"
+  }
+}

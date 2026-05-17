@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>街区基準点ビューア</title>
+    <link
+      href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <div id="map"></div>
+      <div id="banner" class="banner hidden" role="status"></div>
+      <aside id="panel" class="panel">
+        <h1 class="panel-title">街区基準点</h1>
+        <label class="field">
+          <span>平面直角座標系</span>
+          <select id="zone-select" aria-label="座標系選択"></select>
+        </label>
+        <details id="legend-details" class="legend-details" open>
+          <summary>凡例</summary>
+          <div id="legend"></div>
+        </details>
+      </aside>
+      <div id="status-bar" class="status-bar"></div>
+      <div id="download-wrap" class="download-wrap hidden">
+        <button id="download-btn" type="button" disabled>CSVダウンロード</button>
+        <span id="download-hint" class="download-hint"></span>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

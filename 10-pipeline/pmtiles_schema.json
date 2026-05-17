@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "description": "GPKG → detail PMTiles（測地成果2011・初回14本）",
+  "layer_name": "kijyunten",
+  "sokuti": "2011",
+  "input_dir_relative": "20_output/60-csv2geopackage",
+  "output_dir_relative": "../20-data",
+  "input_files": [
+    "測地成果2011_zone01.gpkg",
+    "測地成果2011_zone02.gpkg",
+    "測地成果2011_zone03.gpkg",
+    "測地成果2011_zone04.gpkg",
+    "測地成果2011_zone05.gpkg",
+    "測地成果2011_zone06.gpkg",
+    "測地成果2011_zone07.gpkg",
+    "測地成果2011_zone08.gpkg",
+    "測地成果2011_zone09.gpkg",
+    "測地成果2011_zone10.gpkg",
+    "測地成果2011_zone11.gpkg",
+    "測地成果2011_zone12.gpkg",
+    "測地成果2011_zone13.gpkg",
+    "測地成果2011_zone15.gpkg"
+  ],
+  "split_prefixes": ["H", "S", "T", "TKS", "TKT"],
+  "max_pmtiles_bytes": 104857600,
+  "split_threshold_bytes": 94371840,
+  "detail_zoom": { "minzoom": 15, "maxzoom": 18 },
+  "kind_enum": [
+    "補助点",
+    "街区三角点",
+    "街区三角点節点",
+    "街区多角点",
+    "街区多角点節点",
+    "都市官三角点",
+    "都市官多角点",
+    "土地利用補助点",
+    "土地利用三角点",
+    "土地利用三角点節点",
+    "土地利用多角点",
+    "土地利用多角点節点"
+  ],
+  "detail_attributes": ["id", "name", "x", "y", "z", "kind", "sokuti", "zone", "epsg", "yohosei"]
+}

@@ -1,0 +1,20 @@
+{
+  "groups": [
+    { "id": "gaiku", "label": "街区・都市官" },
+    { "id": "totiriyo", "label": "土地利用", "defaultVisible": false }
+  ],
+  "categories": [
+    { "kind": "補助点", "group": "gaiku", "color": "#5CB85C", "order": 1 },
+    { "kind": "街区三角点", "group": "gaiku", "color": "#D9534F", "order": 2 },
+    { "kind": "街区三角点節点", "group": "gaiku", "color": "#C9302C", "order": 3 },
+    { "kind": "街区多角点", "group": "gaiku", "color": "#337AB7", "order": 4 },
+    { "kind": "街区多角点節点", "group": "gaiku", "color": "#6F42C1", "order": 5 },
+    { "kind": "都市官三角点", "group": "gaiku", "color": "#5CB85C", "order": 6 },
+    { "kind": "都市官多角点", "group": "gaiku", "color": "#449D44", "order": 7 },
+    { "kind": "土地利用補助点", "group": "totiriyo", "color": "#9966CC", "order": 8 },
+    { "kind": "土地利用三角点", "group": "totiriyo", "color": "#7744AA", "order": 9 },
+    { "kind": "土地利用三角点節点", "group": "totiriyo", "color": "#663388", "order": 10 },
+    { "kind": "土地利用多角点", "group": "totiriyo", "color": "#CC8844", "order": 11 },
+    { "kind": "土地利用多角点節点", "group": "totiriyo", "color": "#AA6622", "order": 12 }
+  ]
+}
