@@ -16,6 +16,7 @@
 - 平面直角系（測地成果2011 等）ごとの PMTiles 読込（`manifest.json` 駆動）
 - 点のクリック選択（Ctrl+クリックで複数）→ CSV ダウンロード（縮尺 1:2988 相当以上）
 - 凡例・土地利用表示トグル（QGIS スタイル準拠の色分け）
+- detail 表示時のシンボル・凡例アイコンは [`10_pipeline/60-csv2geopackage/styles/glyphs/`](../../60-csv2geopackage/styles/glyphs/) の SVG を使用（QGIS QML と同型）
 
 ## ローカル開発
 
@@ -36,6 +37,19 @@ npm run preview
 ```
 
 `dist/data/` に `20-data` がコピーされます。
+
+### 本番同等のローカル確認
+
+GitHub Pages と同じ `dist/` 配信（PMTiles の Range 対応）:
+
+```powershell
+.\30-local-server\start.ps1
+# または
+npm run build
+npm run serve:local
+```
+
+詳細: [30-local-server/README.md](30-local-server/README.md)
 
 ## データ
 
@@ -76,5 +90,6 @@ gaiku-kijunten-viewer/
 ├── public/config/       # 縮尺閾値・凡例色
 ├── 10-pipeline/         # GPKG → detail PMTiles
 ├── 15-overview-pipeline/
-└── 20-data/             # manifest + PMTiles
+├── 20-data/             # manifest + PMTiles
+└── 30-local-server/     # dist 静的配信（本番同等）
 ```

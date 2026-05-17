@@ -1,6 +1,10 @@
 import type { KijyuntenStyleConfig } from "@/data/types";
 import { gaikuKinds } from "@/style/buildKindColor";
 
+/**
+ * 凡例は外部画像に依存しない（DOM で色＋字形を描画）。
+ * 地図シンボル用 PNG/SVG とは経路を分離し、404・ビルド漏れの影響を受けない。
+ */
 export function renderLegend(
   container: HTMLElement,
   style: KijyuntenStyleConfig,
@@ -16,7 +20,7 @@ export function renderLegend(
   gaikuGroup.appendChild(gaikuTitle);
 
   for (const cat of gaikuKinds(style)) {
-    gaikuGroup.appendChild(legendItem(cat.kind, cat.color));
+    gaikuGroup.appendChild(legendItem(cat));
   }
   container.appendChild(gaikuGroup);
 
@@ -28,7 +32,7 @@ export function renderLegend(
   totiriyoGroup.appendChild(totiriyoTitle);
 
   for (const cat of style.categories.filter((c) => c.group === "totiriyo")) {
-    totiriyoGroup.appendChild(legendItem(cat.kind, cat.color));
+    totiriyoGroup.appendChild(legendItem(cat));
   }
 
   const toggleLabel = document.createElement("label");
@@ -43,15 +47,30 @@ export function renderLegend(
   container.appendChild(totiriyoGroup);
 }
 
-function legendItem(label: string, color: string): HTMLElement {
+function legendItem(cat: {
+  kind: string;
+  glyph: string;
+  color: string;
+  legendSizePx: number;
+}): HTMLElement {
   const row = document.createElement("div");
   row.className = "legend-item";
-  const sw = document.createElement("span");
-  sw.className = "legend-swatch";
-  sw.style.background = color;
+
+  const marker = document.createElement("span");
+  marker.className = "legend-marker";
+  marker.style.width = `${cat.legendSizePx}px`;
+  marker.style.height = `${cat.legendSizePx}px`;
+  marker.style.backgroundColor = cat.color;
+  marker.style.fontSize = `${Math.max(10, Math.round(cat.legendSizePx * 0.38))}px`;
+  marker.textContent = cat.glyph;
+  marker.title = `${cat.kind}（${cat.glyph}）`;
+  marker.setAttribute("aria-hidden", "true");
+
   const text = document.createElement("span");
-  text.textContent = label;
-  row.appendChild(sw);
+  text.className = "legend-label";
+  text.textContent = cat.kind;
+
+  row.appendChild(marker);
   row.appendChild(text);
   return row;
 }

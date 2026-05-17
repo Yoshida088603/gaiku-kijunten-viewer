@@ -7,15 +7,21 @@ import {
   getOverview,
   groupDetailLayers,
 } from "@/data/layerCatalog";
+import {
+  boundsForZone,
+  focusCenterForBounds,
+  loadZoneBoundsMap,
+} from "@/data/zoneBounds";
 import type { LogicalZoneLayer } from "@/data/types";
 import { createBaseMap } from "@/map/createMap";
 import { LayerManager } from "@/map/layerManager";
-import { evaluateScale, formatScale } from "@/map/scale";
+import { evaluateScale } from "@/map/scale";
 import { SelectionStore } from "@/map/selection";
 import {
   DownloadButtonController,
   type DownloadUiState,
 } from "@/ui/downloadButton";
+import { fallbackIconId, loadKijyuntenIcons } from "@/style/loadIcons";
 import { renderLegend } from "@/ui/legend";
 
 async function main(): Promise<void> {
@@ -50,6 +56,28 @@ async function main(): Promise<void> {
   await new Promise<void>((resolve) => {
     if (map.loaded()) resolve();
     else map.once("load", () => resolve());
+  });
+
+  await loadKijyuntenIcons(map, styleConfig);
+  const zoneBoundsMap = await loadZoneBoundsMap();
+
+  map.on("styleimagemissing", (e) => {
+    if (map.hasImage(e.id)) return;
+    const fb = fallbackIconId();
+    if (e.id !== fb && map.hasImage(fb)) {
+      const img = map.getImage(fb);
+      if (img) {
+        map.addImage(e.id, {
+          width: img.data.width,
+          height: img.data.height,
+          data: img.data.data,
+        });
+      }
+    }
+  });
+
+  map.on("error", (e) => {
+    console.error("map error", e.error);
   });
 
   let manifest;
@@ -109,17 +137,51 @@ async function main(): Promise<void> {
     return zoneLayers.find((z) => z.sokuti === sokuti && z.zone === zone);
   }
 
-  function applyZone(zl: LogicalZoneLayer): void {
+  async function flyToZone(zl: LogicalZoneLayer): Promise<void> {
+    const b = await boundsForZone(zl, zoneBoundsMap);
+    const targetZoom = mapConfig.detailMinZoom + 0.5;
+    const center = focusCenterForBounds(b, mapConfig.defaultCenter);
+    await new Promise<void>((resolve) => {
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      map.once("moveend", finish);
+      window.setTimeout(finish, 2500);
+      map.easeTo({ center, zoom: targetZoom, duration: 800 });
+    });
+  }
+
+  async function applyZone(zl: LogicalZoneLayer): Promise<void> {
     currentZone = zl;
     selection.clear();
-    layerManager.loadDetailZone(zl);
+    layerManager.clearDetail();
+
+    await flyToZone(zl);
+
+    try {
+      layerManager.loadDetailZone(zl);
+      layerManager.setDetailVisible(true);
+      map.triggerRepaint();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      banner!.textContent = `detail レイヤ読込エラー: ${msg}`;
+      banner!.classList.remove("hidden");
+      console.error(e);
+      return;
+    }
+
     updateVisibility();
   }
 
   function updateVisibility(): void {
     const flags = evaluateScale(map, mapConfig);
     const hasOverview = overview !== null;
-    const showDetail = flags.detailVisible && currentZone !== null;
+    const zoom = map.getZoom();
+    const zoomOk = zoom >= mapConfig.detailMinZoom - 0.01;
+    const showDetail = currentZone !== null && zoomOk;
 
     layerManager.setOverviewVisible(hasOverview);
     if (hasOverview) {
@@ -127,7 +189,11 @@ async function main(): Promise<void> {
         flags.detailVisible ? 0.25 : 0.55,
       );
     }
-    layerManager.setDetailVisible(showDetail);
+    // 座標系選択中はレイヤを visible のままにし PMTiles を取得させる（z<15 は layer minzoom で非描画）
+    layerManager.setDetailVisible(currentZone !== null);
+    if (showDetail) {
+      map.triggerRepaint();
+    }
 
     let dlState: DownloadUiState = "hidden";
     if (flags.downloadAllowed) {
@@ -140,10 +206,16 @@ async function main(): Promise<void> {
         ? "overview(薄)+detail"
         : "overview+GSI"
       : "GSIのみ";
-    const detailNote = showDetail ? "detail表示" : "detail非表示";
+    const detailNote = showDetail
+      ? "detail表示"
+      : currentZone
+        ? `detail: z${mapConfig.detailMinZoom}以上に拡大`
+        : "detail非表示";
+    const loaded = showDetail ? layerManager.countLoadedDetailFeatures() : 0;
     statusBar!.innerHTML = [
-      `<div>縮尺: <strong>${formatScale(flags.scale)}</strong></div>`,
-      `<div>${ovNote} / ${detailNote}</div>`,
+      // 縮尺: formatScale(flags.scale)
+      `<div>タイルズーム: <strong>z${Math.round(zoom)}</strong>（地図 ${zoom.toFixed(2)}）</div>`,
+      `<div>${ovNote} / ${detailNote} / 読込点≈${loaded}</div>`,
       `<div>DL: ${flags.downloadAllowed ? "可" : "拡大してください"}</div>`,
       `<div>${mapConfig.gsiAttribution}</div>`,
     ].join("");
@@ -154,10 +226,10 @@ async function main(): Promise<void> {
   );
   if (defaultKey) {
     zoneSelect.value = `${defaultKey.sokuti}:${defaultKey.zone}`;
-    applyZone(defaultKey);
+    await applyZone(defaultKey);
   } else if (zoneLayers.length > 0) {
     zoneSelect.selectedIndex = 0;
-    applyZone(zoneLayers[0]);
+    await applyZone(zoneLayers[0]);
   }
 
   zoneSelect.addEventListener("change", () => {
@@ -167,21 +239,24 @@ async function main(): Promise<void> {
 
   map.on("moveend", updateVisibility);
   map.on("zoomend", updateVisibility);
+  map.on("idle", updateVisibility);
 
   map.on("click", (e) => {
-    const flags = evaluateScale(map, mapConfig);
-    if (!flags.detailVisible) return;
-    selection.handleClick(e, flags.detailVisible);
+    const zoomOk = map.getZoom() >= mapConfig.detailMinZoom - 0.01;
+    if (!zoomOk || !currentZone) return;
+    selection.handleClick(e, true);
     updateVisibility();
   });
 
   map.on("mousemove", (e) => {
-    const flags = evaluateScale(map, mapConfig);
-    if (!flags.detailVisible) {
+    const zoomOk = map.getZoom() >= mapConfig.detailMinZoom - 0.01;
+    if (!zoomOk || !currentZone) {
       map.getCanvas().style.cursor = "";
       return;
     }
-    const layers = layerManager.getDetailLayerIds();
+    const layers = layerManager
+      .getDetailLayerIds()
+      .filter((id) => Boolean(map.getLayer(id)));
     if (layers.length === 0) return;
     const hit = map.queryRenderedFeatures(e.point, { layers });
     map.getCanvas().style.cursor = hit.length > 0 ? "pointer" : "";

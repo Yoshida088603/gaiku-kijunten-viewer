@@ -9,8 +9,10 @@ import {
   overviewUrl,
   tileUrl,
 } from "@/data/layerCatalog";
+import { buildIconImageExpression } from "@/style/buildIconStyle";
+import { buildIconSizeExpression } from "@/style/iconSize";
 import { buildKindColorExpression, totiriyoKinds } from "@/style/buildKindColor";
-
+import { buildCircleRadiusExpression } from "@/style/circleRadius";
 const OVERVIEW_SOURCE = "overview-national";
 const DETAIL_PREFIX = "detail";
 
@@ -50,12 +52,23 @@ export class LayerManager {
 
   private applyKindFilters(): void {
     const color = buildKindColorExpression(this.style, this.hiddenKinds);
+    const radius = buildCircleRadiusExpression(this.style);
+    const iconImage = buildIconImageExpression(this.style, this.hiddenKinds);
+    const iconSize = buildIconSizeExpression(this.style);
     const filter = this.kindFilter();
+
     for (const id of this.detailLayerIds) {
-      if (this.map.getLayer(id)) {
+      const layer = this.map.getLayer(id);
+      if (!layer) continue;
+      if (layer.type === "circle") {
         this.map.setPaintProperty(id, "circle-color", color);
-        this.map.setFilter(id, filter);
+        this.map.setPaintProperty(id, "circle-radius", radius);
+      } else if (layer.type === "symbol") {
+        this.map.setLayoutProperty(id, "icon-image", iconImage);
+        this.map.setLayoutProperty(id, "icon-size", iconSize);
       }
+      if (filter) this.map.setFilter(id, filter);
+      else this.map.setFilter(id, null);
     }
   }
 
@@ -158,58 +171,94 @@ export class LayerManager {
   loadDetailZone(zoneLayer: LogicalZoneLayer): void {
     this.clearDetail();
     const color = buildKindColorExpression(this.style, this.hiddenKinds);
+    const radius = buildCircleRadiusExpression(this.style);
+    const iconImage = buildIconImageExpression(this.style, this.hiddenKinds);
+    const iconSize = buildIconSizeExpression(this.style);
     const filter = this.kindFilter();
+    const sourceLayer = this.config.detailSourceLayer;
 
     zoneLayer.tiles.forEach((tile, index) => {
       const sourceId = `${DETAIL_PREFIX}-z${zoneLayer.zone}-${tile.csv_prefix ?? index}`;
-      const layerId = `${sourceId}-points`;
+      const circleLayerId = `${sourceId}-circles`;
+      const symbolLayerId = `${sourceId}-symbols`;
+
       this.map.addSource(sourceId, {
         type: "vector",
         url: tileUrl(tile),
-        minzoom: 15,
-        maxzoom: 18,
         promoteId: "id",
       });
       this.detailSourceIds.push(sourceId);
 
       this.map.addLayer({
-        id: layerId,
+        id: circleLayerId,
         type: "circle",
         source: sourceId,
-        "source-layer": this.config.detailSourceLayer,
+        "source-layer": sourceLayer,
         minzoom: 15,
         layout: {
-          visibility: "none",
+          visibility: "visible",
         },
         paint: {
-          "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            15,
-            3,
-            18,
-            7,
-          ],
           "circle-color": color,
+          "circle-radius": radius,
+          "circle-opacity": 0.92,
           "circle-stroke-width": [
             "case",
             ["boolean", ["feature-state", "selected"], false],
-            2,
-            0,
+            2.5,
+            0.8,
           ],
-          "circle-stroke-color": "#ffcc00",
+          "circle-stroke-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "#ffcc00",
+            "#333333",
+          ],
         },
         filter,
       });
-      this.detailLayerIds.push(layerId);
+
+      this.map.addLayer({
+        id: symbolLayerId,
+        type: "symbol",
+        source: sourceId,
+        "source-layer": sourceLayer,
+        minzoom: 15,
+        layout: {
+          visibility: "visible",
+          "icon-image": iconImage,
+          "icon-size": iconSize,
+          "icon-anchor": "center",
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true,
+        },
+        paint: {
+          "icon-opacity": 1,
+          "icon-halo-width": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            2.5,
+            0,
+          ],
+          "icon-halo-color": "#ffcc00",
+        },
+        filter,
+      });
+
+      this.detailLayerIds.push(circleLayerId, symbolLayerId);
     });
+
+    this.map.triggerRepaint();
   }
 
+  /** 座標系選択中は常に visible（none にすると PMTiles の Range 取得が走らない） */
   setDetailVisible(visible: boolean): void {
     const v = visible ? "visible" : "none";
     for (const id of this.detailLayerIds) {
       if (this.map.getLayer(id)) this.map.setLayoutProperty(id, "visibility", v);
+    }
+    if (visible) {
+      this.map.triggerRepaint();
     }
   }
 
@@ -221,6 +270,20 @@ export class LayerManager {
     return [...this.detailSourceIds];
   }
 
+  countLoadedDetailFeatures(): number {
+    let n = 0;
+    const sourceLayer = this.config.detailSourceLayer;
+    for (const sourceId of this.detailSourceIds) {
+      try {
+        const features = this.map.querySourceFeatures(sourceId, { sourceLayer });
+        n += features.length;
+      } catch {
+        /* source not ready */
+      }
+    }
+    return n;
+  }
+
   setFeatureSelected(sourceId: string, featureId: string, selected: boolean): void {
     try {
       this.map.setFeatureState(
@@ -228,7 +291,7 @@ export class LayerManager {
         { selected },
       );
     } catch {
-      /* promoteId 未設定時は stroke が効かないのみ */
+      /* ignore */
     }
   }
 

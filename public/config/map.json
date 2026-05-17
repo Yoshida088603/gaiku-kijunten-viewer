@@ -1,7 +1,7 @@
 {
   "detailMinScale": 11954,
   "downloadMinScale": 2988,
-  "detailMinZoom": 16,
+  "detailMinZoom": 15,
   "downloadMinZoom": 17,
   "overviewMaxZoom": 17,
   "dataBaseUrl": "./data/",

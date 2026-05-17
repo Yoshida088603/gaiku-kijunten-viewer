@@ -17,11 +17,19 @@ export interface MapConfig {
 export interface StyleCategory {
   kind: string;
   group: string;
+  glyph: string;
   color: string;
+  icon: string;
+  sizeRatio: number;
+  legendSizePx: number;
   order: number;
 }
 
 export interface KijyuntenStyleConfig {
+  markerReferenceScale?: number;
+  markerSizeM?: number;
+  markerSizeMmRef?: number;
+  svgPixelSize?: number;
   groups: { id: string; label: string; defaultVisible?: boolean }[];
   categories: StyleCategory[];
 }

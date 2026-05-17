@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="10" fill="#AA6622" stroke="#333333" stroke-width="0.6"/>
+  <text x="12" y="16" text-anchor="middle" font-size="9" font-weight="bold"
+        fill="#FFFFFF" font-family="MS Gothic, Meiryo, sans-serif">多節</text>
+</svg>

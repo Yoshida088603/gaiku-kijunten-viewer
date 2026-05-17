@@ -5,14 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/copy-data.mjs",
-    "preview": "vite preview"
+    "build": "tsc --noEmit && node scripts/rasterize-icons.mjs && vite build && node scripts/copy-data.mjs",
+    "preview": "vite preview",
+    "serve:local": "node 30-local-server/serve.mjs"
   },
   "dependencies": {
     "maplibre-gl": "^4.7.1",
     "pmtiles": "^3.2.1"
   },
   "devDependencies": {
+    "playwright": "^1.49.1",
+    "sharp": "^0.33.5",
     "typescript": "~5.6.3",
     "vite": "^5.4.11"
   }
