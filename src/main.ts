@@ -24,9 +24,12 @@ import {
 } from "@/ui/downloadButton";
 import { fallbackIconId, loadKijyuntenIcons } from "@/style/loadIcons";
 import { renderLegend } from "@/ui/legend";
+import { initLegendPanelToggle } from "@/ui/legendPanel";
 
 async function main(): Promise<void> {
   const mapEl = document.getElementById("map");
+  const panelShell = document.getElementById("panel-shell");
+  const panelToggle = document.getElementById("panel-toggle") as HTMLButtonElement | null;
   const legendEl = document.getElementById("legend");
   const statusBar = document.getElementById("status-bar");
   const banner = document.getElementById("banner");
@@ -36,6 +39,8 @@ async function main(): Promise<void> {
 
   if (
     !mapEl ||
+    !panelShell ||
+    !panelToggle ||
     !legendEl ||
     !statusBar ||
     !banner ||
@@ -116,6 +121,7 @@ async function main(): Promise<void> {
   );
 
   renderLegend(legendEl, styleConfig);
+  initLegendPanelToggle(panelShell, panelToggle);
 
   const AUTO_SWITCH_HYSTERESIS_METERS = 800;
   let currentZone: LogicalZoneLayer | null = null;

@@ -13,13 +13,31 @@
     <div id="app">
       <div id="map"></div>
       <div id="banner" class="banner hidden" role="status"></div>
-      <aside id="panel" class="panel">
-        <h1 class="panel-title">街区基準点</h1>
-        <details id="legend-details" class="legend-details" open>
-          <summary>凡例</summary>
-          <div id="legend"></div>
-        </details>
-      </aside>
+      <div id="panel-shell" class="panel-shell">
+        <aside id="panel" class="panel">
+          <header class="panel-header">
+            <h1 class="panel-title">街区基準点</h1>
+            <button
+              id="panel-toggle"
+              type="button"
+              class="panel-toggle"
+              aria-expanded="true"
+              aria-controls="panel-body"
+              aria-label="凡例を閉じる"
+            >
+              <span class="panel-toggle-bars" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </button>
+          </header>
+          <div id="panel-body" class="panel-body">
+            <h2 class="legend-heading">凡例</h2>
+            <div id="legend"></div>
+          </div>
+        </aside>
+      </div>
       <div id="status-bar" class="status-bar"></div>
       <div id="download-wrap" class="download-wrap hidden">
         <button id="download-btn" type="button" disabled>CSVダウンロード</button>
