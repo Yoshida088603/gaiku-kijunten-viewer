@@ -116,10 +116,22 @@ class LevelGridAggregator:
         return out
 
 
-def _cell_center_lonlat(gx: int, gy: int, cell_deg: float) -> tuple[float, float]:
-    lon = (gx + 0.5) * cell_deg
-    lat = (gy + 0.5) * cell_deg
-    return lon, lat
+def _cell_bbox_polygon(gx: int, gy: int, cell_deg: float) -> ogr.Geometry:
+    """占有セルの WGS84 外接矩形（反時計回り）。"""
+    min_lon = gx * cell_deg
+    min_lat = gy * cell_deg
+    max_lon = (gx + 1) * cell_deg
+    max_lat = (gy + 1) * cell_deg
+    ring = ogr.Geometry(ogr.wkbLinearRing)
+    ring.AddPoint(min_lon, min_lat)
+    ring.AddPoint(max_lon, min_lat)
+    ring.AddPoint(max_lon, max_lat)
+    ring.AddPoint(min_lon, max_lat)
+    ring.AddPoint(min_lon, min_lat)
+    poly = ogr.Geometry(ogr.wkbPolygon)
+    poly.AddGeometry(ring)
+    poly.FlattenTo2D()
+    return poly
 
 
 def ingest_gpkg_points(gpkg_path: Path, sink: MultiGridAggregator | LevelGridAggregator) -> int:
@@ -186,7 +198,7 @@ def write_overview_gpkg(
 
     layers_created: dict[str, ogr.Layer] = {}
     for lv in levels:
-        lyr = ds.CreateLayer(lv.layer_name, srs, ogr.wkbPoint)
+        lyr = ds.CreateLayer(lv.layer_name, srs, ogr.wkbPolygon)
         if lyr is None:
             raise RuntimeError(f"レイヤ作成失敗: {lv.layer_name}")
         lyr.CreateField(ogr.FieldDefn("n", ogr.OFTInteger))
@@ -199,16 +211,13 @@ def write_overview_gpkg(
         layers_created[lv.level] = lyr
 
     for lv, gx, gy, n in aggregator.iter_features():
-        lon, lat = _cell_center_lonlat(gx, gy, lv.cell_deg)
         lyr = layers_created[lv.level]
         feat = ogr.Feature(lyr.GetLayerDefn())
         feat.SetField("n", n)
         feat.SetField("level", lv.level)
         feat.SetField("minzoom", lv.minzoom)
         feat.SetField("maxzoom", lv.maxzoom)
-        pt = ogr.Geometry(ogr.wkbPoint)
-        pt.AddPoint(lon, lat)
-        feat.SetGeometry(pt)
+        feat.SetGeometry(_cell_bbox_polygon(gx, gy, lv.cell_deg))
         lyr.CreateFeature(feat)
         feat = None
 

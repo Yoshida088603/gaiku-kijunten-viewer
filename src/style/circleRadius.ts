@@ -1,17 +1,17 @@
 import type { ExpressionSpecification } from "maplibre-gl";
 import type { KijyuntenStyleConfig } from "@/data/types";
+import { forEachKindMappingAll } from "@/style/kindDisplayMap";
 
 /** kind ごとの sizeRatio を掛けた circle-radius（タイル読込の目印にも使う） */
 export function buildCircleRadiusExpression(
   style: KijyuntenStyleConfig,
 ): ExpressionSpecification {
   const ratioParts: unknown[] = ["match", ["get", "kind"]];
-  for (const cat of style.categories) {
-    ratioParts.push(cat.kind, cat.sizeRatio);
-  }
+  forEachKindMappingAll(style, (rawKind, cat) => {
+    ratioParts.push(rawKind, cat.sizeRatio);
+  });
   ratioParts.push(1);
 
-  // zoom は最上位 interpolate の入力にのみ使える（* の子に置けない）
   return [
     "interpolate",
     ["linear"],

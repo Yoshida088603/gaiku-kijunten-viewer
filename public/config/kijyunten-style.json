@@ -3,22 +3,56 @@
   "markerSizeM": 24,
   "markerSizeMmRef": 4.5,
   "svgPixelSize": 24,
-  "groups": [
-    { "id": "gaiku", "label": "街区・都市官" },
-    { "id": "totiriyo", "label": "土地利用", "defaultVisible": false }
-  ],
   "categories": [
-    { "kind": "補助点", "group": "gaiku", "glyph": "補", "color": "#5CB85C", "icon": "補助点.svg", "sizeRatio": 1.0, "legendSizePx": 32, "order": 1 },
-    { "kind": "街区三角点", "group": "gaiku", "glyph": "三", "color": "#D9534F", "icon": "街区三角点.svg", "sizeRatio": 1.0, "legendSizePx": 32, "order": 2 },
-    { "kind": "街区三角点節点", "group": "gaiku", "glyph": "三節", "color": "#C9302C", "icon": "街区三角点節点.svg", "sizeRatio": 0.889, "legendSizePx": 26, "order": 3 },
-    { "kind": "街区多角点", "group": "gaiku", "glyph": "多", "color": "#337AB7", "icon": "街区多角点.svg", "sizeRatio": 1.0, "legendSizePx": 32, "order": 4 },
-    { "kind": "街区多角点節点", "group": "gaiku", "glyph": "多節", "color": "#6F42C1", "icon": "街区多角点節点.svg", "sizeRatio": 0.889, "legendSizePx": 26, "order": 5 },
-    { "kind": "都市官三角点", "group": "gaiku", "glyph": "三", "color": "#5CB85C", "icon": "都市官三角点.svg", "sizeRatio": 1.0, "legendSizePx": 32, "order": 6 },
-    { "kind": "都市官多角点", "group": "gaiku", "glyph": "多", "color": "#449D44", "icon": "都市官多角点.svg", "sizeRatio": 1.0, "legendSizePx": 32, "order": 7 },
-    { "kind": "土地利用補助点", "group": "totiriyo", "glyph": "補", "color": "#9966CC", "icon": "土地利用補助点.svg", "sizeRatio": 0.889, "legendSizePx": 26, "order": 8 },
-    { "kind": "土地利用三角点", "group": "totiriyo", "glyph": "三", "color": "#7744AA", "icon": "土地利用三角点.svg", "sizeRatio": 0.889, "legendSizePx": 26, "order": 9 },
-    { "kind": "土地利用三角点節点", "group": "totiriyo", "glyph": "三節", "color": "#663388", "icon": "土地利用三角点節点.svg", "sizeRatio": 0.778, "legendSizePx": 24, "order": 10 },
-    { "kind": "土地利用多角点", "group": "totiriyo", "glyph": "多", "color": "#CC8844", "icon": "土地利用多角点.svg", "sizeRatio": 0.889, "legendSizePx": 26, "order": 11 },
-    { "kind": "土地利用多角点節点", "group": "totiriyo", "glyph": "多節", "color": "#AA6622", "icon": "土地利用多角点節点.svg", "sizeRatio": 0.778, "legendSizePx": 24, "order": 12 }
+    {
+      "label": "補助点",
+      "glyph": "補",
+      "color": "#5CB85C",
+      "icon": "icon-ho.svg",
+      "kinds": ["補助点", "土地利用補助点"],
+      "sizeRatio": 1.0,
+      "legendSizePx": 32,
+      "order": 1
+    },
+    {
+      "label": "三角点",
+      "glyph": "三",
+      "color": "#D9534F",
+      "icon": "icon-san.svg",
+      "kinds": ["街区三角点", "都市官三角点", "土地利用三角点"],
+      "sizeRatio": 1.0,
+      "legendSizePx": 32,
+      "order": 2
+    },
+    {
+      "label": "三角点節点",
+      "glyph": "三節",
+      "color": "#C9302C",
+      "icon": "icon-san-setsu.svg",
+      "kinds": ["街区三角点節点", "土地利用三角点節点"],
+      "sizeRatio": 0.889,
+      "legendSizePx": 26,
+      "order": 3
+    },
+    {
+      "label": "多角点",
+      "glyph": "多",
+      "color": "#337AB7",
+      "icon": "icon-ta.svg",
+      "kinds": ["街区多角点", "都市官多角点", "土地利用多角点"],
+      "sizeRatio": 1.0,
+      "legendSizePx": 32,
+      "order": 4
+    },
+    {
+      "label": "多角点節点",
+      "glyph": "多節",
+      "color": "#6F42C1",
+      "icon": "icon-ta-setsu.svg",
+      "kinds": ["街区多角点節点", "土地利用多角点節点"],
+      "sizeRatio": 0.889,
+      "legendSizePx": 26,
+      "order": 5
+    }
   ]
 }

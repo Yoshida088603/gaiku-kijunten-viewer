@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && node scripts/rasterize-icons.mjs && vite build && node scripts/copy-data.mjs",
+    "build": "tsc --noEmit && node scripts/generate-icon-svgs.mjs && node scripts/rasterize-icons.mjs && vite build && node scripts/copy-data.mjs",
     "preview": "vite preview",
     "serve:local": "node 30-local-server/serve.mjs"
   },

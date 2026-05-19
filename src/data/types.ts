@@ -15,11 +15,11 @@ export interface MapConfig {
 }
 
 export interface StyleCategory {
-  kind: string;
-  group: string;
+  label: string;
   glyph: string;
   color: string;
   icon: string;
+  kinds: string[];
   sizeRatio: number;
   legendSizePx: number;
   order: number;
@@ -30,7 +30,6 @@ export interface KijyuntenStyleConfig {
   markerSizeM?: number;
   markerSizeMmRef?: number;
   svgPixelSize?: number;
-  groups: { id: string; label: string; defaultVisible?: boolean }[];
   categories: StyleCategory[];
 }
 

@@ -17,8 +17,7 @@ function iconPngId(order) {
 }
 
 async function rasterize(srcSvg, destPng) {
-  let svg = fs.readFileSync(srcSvg, "utf8");
-  svg = svg.replace(/font-family="[^"]*"/gi, 'font-family="sans-serif"');
+  const svg = fs.readFileSync(srcSvg, "utf8");
   await sharp(Buffer.from(svg), { density: 192 })
     .resize(PX, PX)
     .png()

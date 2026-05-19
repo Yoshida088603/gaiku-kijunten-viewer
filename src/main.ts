@@ -117,9 +117,7 @@ async function main(): Promise<void> {
     mapConfig.csvColumns,
   );
 
-  renderLegend(legendEl, styleConfig, (visible) => {
-    layerManager.setTotiriyoVisible(visible);
-  });
+  renderLegend(legendEl, styleConfig);
 
   zoneSelect.innerHTML = "";
   for (const zl of zoneLayers) {

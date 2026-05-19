@@ -7,25 +7,25 @@
   "max_pmtiles_bytes": 10485760,
   "target_total_cells_min": 12000,
   "target_total_cells_max": 28000,
-  "candidate_cell_deg": [0.5, 0.35, 0.2, 0.12, 0.08, 0.04, 0.03],
+  "candidate_cell_deg": [0.5, 0.35, 0.2, 0.12, 0.0875, 0.08, 0.04, 0.03, 0.01],
   "grid_levels": [
     {
       "level": 1,
-      "cell_deg": 0.35,
+      "cell_deg": 0.0875,
       "minzoom": 0,
       "maxzoom": 7,
       "layer_name": "overview_L1"
     },
     {
       "level": 2,
-      "cell_deg": 0.12,
+      "cell_deg": 0.03,
       "minzoom": 8,
       "maxzoom": 11,
       "layer_name": "overview_L2"
     },
     {
       "level": 3,
-      "cell_deg": 0.04,
+      "cell_deg": 0.01,
       "minzoom": 12,
       "maxzoom": 13,
       "layer_name": "overview_L3"

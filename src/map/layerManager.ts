@@ -11,7 +11,7 @@ import {
 } from "@/data/layerCatalog";
 import { buildIconImageExpression } from "@/style/buildIconStyle";
 import { buildIconSizeExpression } from "@/style/iconSize";
-import { buildKindColorExpression, totiriyoKinds } from "@/style/buildKindColor";
+import { buildKindColorExpression } from "@/style/buildKindColor";
 import { buildCircleRadiusExpression } from "@/style/circleRadius";
 const OVERVIEW_SOURCE = "overview-national";
 const DETAIL_PREFIX = "detail";
@@ -27,20 +27,7 @@ export class LayerManager {
     private map: MaplibreMap,
     private config: MapConfig,
     private style: KijyuntenStyleConfig,
-  ) {
-    const hidden = totiriyoKinds(style);
-    for (const k of hidden) this.hiddenKinds.add(k);
-  }
-
-  setTotiriyoVisible(visible: boolean): void {
-    const hidden = totiriyoKinds(this.style);
-    if (visible) {
-      for (const k of hidden) this.hiddenKinds.delete(k);
-    } else {
-      for (const k of hidden) this.hiddenKinds.add(k);
-    }
-    this.applyKindFilters();
-  }
+  ) {}
 
   private kindFilter(): ExpressionSpecification | undefined {
     if (this.hiddenKinds.size === 0) return undefined;
@@ -48,28 +35,6 @@ export class LayerManager {
       "!",
       ["in", ["get", "kind"], ["literal", [...this.hiddenKinds]]],
     ] as ExpressionSpecification;
-  }
-
-  private applyKindFilters(): void {
-    const color = buildKindColorExpression(this.style, this.hiddenKinds);
-    const radius = buildCircleRadiusExpression(this.style);
-    const iconImage = buildIconImageExpression(this.style, this.hiddenKinds);
-    const iconSize = buildIconSizeExpression(this.style);
-    const filter = this.kindFilter();
-
-    for (const id of this.detailLayerIds) {
-      const layer = this.map.getLayer(id);
-      if (!layer) continue;
-      if (layer.type === "circle") {
-        this.map.setPaintProperty(id, "circle-color", color);
-        this.map.setPaintProperty(id, "circle-radius", radius);
-      } else if (layer.type === "symbol") {
-        this.map.setLayoutProperty(id, "icon-image", iconImage);
-        this.map.setLayoutProperty(id, "icon-size", iconSize);
-      }
-      if (filter) this.map.setFilter(id, filter);
-      else this.map.setFilter(id, null);
-    }
   }
 
   ensureOverview(overview: ManifestOverview): void {
@@ -109,7 +74,7 @@ export class LayerManager {
       const layerId = `overview-${lv.layer_name}`;
       this.map.addLayer({
         id: layerId,
-        type: "circle",
+        type: "fill",
         source: OVERVIEW_SOURCE,
         "source-layer": lv.layer_name,
         minzoom: lv.minzoom,
@@ -119,23 +84,8 @@ export class LayerManager {
           visibility: "visible",
         },
         paint: {
-          "circle-color": "#337ab7",
-          "circle-opacity": 0.55,
-          "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["get", "n"],
-            1,
-            3,
-            100,
-            8,
-            1000,
-            14,
-            10000,
-            20,
-          ],
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#ffffff",
+          "fill-color": "#22c55e",
+          "fill-opacity": 1,
         },
       });
       this.overviewLayerIds.push(layerId);
@@ -153,7 +103,7 @@ export class LayerManager {
   setOverviewOpacity(opacity: number): void {
     for (const id of this.overviewLayerIds) {
       if (this.map.getLayer(id)) {
-        this.map.setPaintProperty(id, "circle-opacity", opacity);
+        this.map.setPaintProperty(id, "fill-opacity", opacity);
       }
     }
   }
@@ -175,8 +125,9 @@ export class LayerManager {
     const radius = buildCircleRadiusExpression(this.style);
     const iconImage = buildIconImageExpression(this.style, this.hiddenKinds);
     const iconSize = buildIconSizeExpression(this.style);
-    const filter = this.kindFilter();
+    const kindFilter = this.kindFilter();
     const sourceLayer = this.config.detailSourceLayer;
+    const layerFilter = kindFilter ? { filter: kindFilter } : {};
 
     zoneLayer.tiles.forEach((tile, index) => {
       const sourceId = `${DETAIL_PREFIX}-z${zoneLayer.zone}-${tile.csv_prefix ?? index}`;
@@ -216,7 +167,7 @@ export class LayerManager {
             "#333333",
           ],
         },
-        filter,
+        ...layerFilter,
       });
 
       this.map.addLayer({
@@ -243,7 +194,7 @@ export class LayerManager {
           ],
           "icon-halo-color": "#ffcc00",
         },
-        filter,
+        ...layerFilter,
       });
 
       this.detailLayerIds.push(circleLayerId, symbolLayerId);

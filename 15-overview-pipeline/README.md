@@ -1,6 +1,6 @@
 # Overview PMTiles パイプライン
 
-全国のデータ分布目安用 overview（3段グリッド）を生成します。
+全国のデータ分布目安用 overview（3段グリッド・占有セル矩形）を生成します。
 
 ## 要件
 
@@ -21,21 +21,21 @@ cd 15-overview-pipeline
 | ファイル | 内容 |
 |----------|------|
 | `../20-data/overview_granularity_report.json` | 検査レポート |
-| `../20-data/pmtiles/overview/測地成果2011_national.pmtiles` | overview タイル（約 1.4 MB） |
+| `../20-data/pmtiles/overview/測地成果2011_national.pmtiles` | overview タイル（約 4.2 MB） |
 | `../20-data/_tmp/overview_grid.gpkg` | 中間3レイヤ GPKG |
 | `../20-data/manifest.json` | `overview` セクション追記 |
 | `../20-data/build_overview.log` | ogr2ogr ログ |
 
-**ビルド結果（QGIS 3.44.9）**: ソースセル 3,822 点（L1:274 / L2:801 / L3:2,747）、PMTiles `minzoom=0` `maxzoom=13`、source-layer `overview_L1`–`L3`。
-検査レポートの推奨（0.35 / 0.08 / 0.03）と異なる場合は `overview_schema.json` の `grid_levels` を更新してから再ビルドしてください。
+**ビルド結果（QGIS 3.44.9・辺 1/4 試験）**: 占有セル **23,721** 件（L1:1,136 / L2:3,959 / L3:18,626）の **Polygon**、PMTiles **4,368,460 バイト**（`minzoom=0` `maxzoom=13`）、source-layer `overview_L1`–`L3`。10 MB 目標内・警告なし。ビューアは `fill` レイヤで一律半透明表示。
+検査レポートの推奨と異なる場合は `overview_schema.json` の `grid_levels` を更新してから再ビルドしてください。
 
 ## ズーム設計
 
 | レイヤ | cell_deg | zoom |
 |--------|----------|------|
-| overview_L1 | 0.35° | 0–7 |
-| overview_L2 | 0.12° | 8–11 |
-| overview_L3 | 0.04° | 12–13 |
+| overview_L1 | 0.0875°（従来 0.35° の 1/4） | 0–7 |
+| overview_L2 | 0.03°（従来 0.12° の 1/4） | 8–11 |
+| overview_L3 | 0.01°（従来 0.04° の 1/4） | 12–13 |
 
 detail PMTiles（`10-pipeline`）は z13–17。**z13 で overview と detail を重ね表示**（ビューア側で overview 透明度を z12–14 でフェード）。
 

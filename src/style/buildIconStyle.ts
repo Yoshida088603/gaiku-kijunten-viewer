@@ -1,5 +1,6 @@
 import type { ExpressionSpecification } from "maplibre-gl";
 import type { KijyuntenStyleConfig } from "@/data/types";
+import { forEachKindMapping } from "@/style/kindDisplayMap";
 import { fallbackIconId, iconIdForCategory } from "@/style/loadIcons";
 
 export function buildIconImageExpression(
@@ -7,10 +8,9 @@ export function buildIconImageExpression(
   hiddenKinds: Set<string>,
 ): ExpressionSpecification {
   const parts: unknown[] = ["match", ["get", "kind"]];
-  for (const cat of style.categories) {
-    if (hiddenKinds.has(cat.kind)) continue;
-    parts.push(cat.kind, iconIdForCategory(cat.order));
-  }
+  forEachKindMapping(style, hiddenKinds, (rawKind, cat) => {
+    parts.push(rawKind, iconIdForCategory(cat.order));
+  });
   parts.push(fallbackIconId());
   return parts as ExpressionSpecification;
 }

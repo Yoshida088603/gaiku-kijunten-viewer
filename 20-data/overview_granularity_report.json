@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-05-17T08:23:22.607450+00:00",
+  "generated_at": "2026-05-19T11:38:19.108913+00:00",
   "input_gpkg_dir": "C:\\Users\\Shiro\\Desktop\\国土交通省\\20260219昨年納品DVD\\05ホームページ公開用データ及びプログラム\\20_output\\60-csv2geopackage",
   "detail_pmtiles_dir": "C:\\Users\\Shiro\\Desktop\\国土交通省\\20260219昨年納品DVD\\05ホームページ公開用データ及びプログラム\\10_pipeline\\70-maplibre\\gaiku-kijunten-viewer\\20-data\\pmtiles\\detail",
   "total_source_points": 1020008,
-  "detail_pmtiles_feature_total": 1100885,
+  "detail_pmtiles_feature_total": 1101327,
   "per_gpkg_point_counts": {
     "測地成果2011_zone01.gpkg": 14003,
     "測地成果2011_zone02.gpkg": 108638,
@@ -49,6 +49,13 @@
       "p95_n": 5250.0,
       "mean_n": 1273.4
     },
+    "0.0875": {
+      "cells": 1136,
+      "total_points": 1020008,
+      "max_n": 12683,
+      "p95_n": 3765.0,
+      "mean_n": 897.9
+    },
     "0.08": {
       "cells": 1231,
       "total_points": 1020008,
@@ -69,150 +76,157 @@
       "max_n": 3979,
       "p95_n": 885.0,
       "mean_n": 257.6
+    },
+    "0.01": {
+      "cells": 18626,
+      "total_points": 1020008,
+      "max_n": 1036,
+      "p95_n": 146.0,
+      "mean_n": 54.8
     }
   },
   "detail_pmtiles": [
     {
       "file": "測地成果2011_zone01.pmtiles",
-      "bytes": 4516699,
-      "feature_count": 15142,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 3837199,
+      "feature_count": 15123,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "128.8244878,28.1372944,130.3806617,34.2135849"
     },
     {
       "file": "測地成果2011_zone02.pmtiles",
-      "bytes": 34195221,
-      "feature_count": 117357,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 28836277,
+      "feature_count": 117304,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "130.0085129,30.7230294,131.9236232,33.9698489"
     },
     {
       "file": "測地成果2011_zone03.pmtiles",
-      "bytes": 18207314,
-      "feature_count": 57710,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 14814848,
+      "feature_count": 57730,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "130.8762209,33.9123054,133.4538844,35.4980163"
     },
     {
       "file": "測地成果2011_zone04.pmtiles",
-      "bytes": 10964848,
-      "feature_count": 35481,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 8922954,
+      "feature_count": 35550,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "132.4119335,32.7736195,134.6943580,34.3624205"
     },
     {
       "file": "測地成果2011_zone05.pmtiles",
-      "bytes": 21864042,
-      "feature_count": 68804,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 17928034,
+      "feature_count": 68774,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "133.2033399,34.2483820,135.4594247,35.6503993"
     },
     {
       "file": "測地成果2011_zone06.pmtiles",
-      "bytes": 60794586,
-      "feature_count": 191757,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 49188565,
+      "feature_count": 191901,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "134.6990823,33.6242007,136.9105171,36.2315760"
     },
     {
       "file": "測地成果2011_zone07.pmtiles",
-      "bytes": 49891859,
+      "bytes": 40210059,
       "feature_count": 158223,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "136.2927487,34.5799477,137.5192148,37.4054243"
     },
     {
       "file": "測地成果2011_zone08.pmtiles",
-      "bytes": 32839585,
-      "feature_count": 103454,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 26564644,
+      "feature_count": 103547,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "137.4803111,34.6119142,139.3504914,38.0928686"
     },
     {
       "file": "測地成果2011_zone09.pmtiles",
-      "bytes": 86101418,
-      "feature_count": 260561,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 68929559,
+      "feature_count": 260738,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "138.9622572,34.9757042,140.9327986,37.8658209"
     },
     {
       "file": "測地成果2011_zone10.pmtiles",
-      "bytes": 15617294,
-      "feature_count": 42257,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 12021427,
+      "feature_count": 42310,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "139.7979645,37.8855537,141.9716288,41.3068916"
     },
     {
       "file": "測地成果2011_zone11.pmtiles",
-      "bytes": 2210093,
-      "feature_count": 5707,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 1685561,
+      "feature_count": 5693,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "140.1204031,41.7465175,141.1781995,43.2293122"
     },
     {
       "file": "測地成果2011_zone12.pmtiles",
-      "bytes": 12559164,
-      "feature_count": 31046,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 9376558,
+      "feature_count": 30929,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "140.9780036,42.3333243,142.4796522,45.4478969"
     },
     {
       "file": "測地成果2011_zone13.pmtiles",
-      "bytes": 3512933,
-      "feature_count": 8636,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 2656784,
+      "feature_count": 8670,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "143.0286319,42.8710583,145.6054390,44.0323975"
     },
     {
       "file": "測地成果2011_zone15.pmtiles",
-      "bytes": 484253,
-      "feature_count": 4750,
-      "minzoom": "15",
-      "maxzoom": "18",
+      "bytes": 428199,
+      "feature_count": 4835,
+      "minzoom": "13",
+      "maxzoom": "17",
       "bounds": "127.6568601,26.1817641,127.7388056,26.2460948"
     }
   ],
   "recommendation": {
     "recommended_triple": {
       "L1_cell_deg": 0.35,
-      "L2_cell_deg": 0.08,
-      "L3_cell_deg": 0.03,
-      "total_cells": 5464,
-      "score": -6536
+      "L2_cell_deg": 0.0875,
+      "L3_cell_deg": 0.01,
+      "total_cells": 20036,
+      "score": 964
     },
     "configured_in_schema": [
       {
         "level": 1,
-        "cell_deg": 0.35,
+        "cell_deg": 0.0875,
         "minzoom": 0,
         "maxzoom": 7,
         "layer_name": "overview_L1"
       },
       {
         "level": 2,
-        "cell_deg": 0.12,
+        "cell_deg": 0.03,
         "minzoom": 8,
         "maxzoom": 11,
         "layer_name": "overview_L2"
       },
       {
         "level": 3,
-        "cell_deg": 0.04,
+        "cell_deg": 0.01,
         "minzoom": 12,
-        "maxzoom": 14,
+        "maxzoom": 13,
         "layer_name": "overview_L3"
       }
     ],
