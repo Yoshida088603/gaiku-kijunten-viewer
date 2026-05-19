@@ -24,7 +24,7 @@
   "split_prefixes": ["H", "S", "T", "TKS", "TKT"],
   "max_pmtiles_bytes": 104857600,
   "split_threshold_bytes": 94371840,
-  "detail_zoom": { "minzoom": 15, "maxzoom": 18 },
+  "detail_zoom": { "minzoom": 13, "maxzoom": 17 },
   "kind_enum": [
     "補助点",
     "街区三角点",

@@ -70,7 +70,7 @@ export function getOverview(manifest: Manifest): ManifestOverview | null {
     path: ovLayer.path,
     pmtiles: ovLayer.pmtiles,
     minzoom: 0,
-    maxzoom: 14,
+    maxzoom: 13,
     grid_levels: [],
   };
 }

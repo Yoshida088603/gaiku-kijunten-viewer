@@ -10,3 +10,4 @@ __pycache__/
 20-data/_tmp/
 20-data/_tmp_sql/
 20-data/*.log
+40-debug/*.har

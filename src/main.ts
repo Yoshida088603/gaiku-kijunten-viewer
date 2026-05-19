@@ -185,11 +185,22 @@ async function main(): Promise<void> {
 
     layerManager.setOverviewVisible(hasOverview);
     if (hasOverview) {
-      layerManager.setOverviewOpacity(
-        flags.detailVisible ? 0.25 : 0.55,
-      );
+      const fadeStart = 12;
+      const fadeEnd = 14;
+      const opaque = 0.55;
+      const faint = 0.12;
+      let overviewOpacity = opaque;
+      if (zoom <= fadeStart) {
+        overviewOpacity = opaque;
+      } else if (zoom >= fadeEnd) {
+        overviewOpacity = faint;
+      } else {
+        const t = (zoom - fadeStart) / (fadeEnd - fadeStart);
+        overviewOpacity = opaque + (faint - opaque) * t;
+      }
+      layerManager.setOverviewOpacity(overviewOpacity);
     }
-    // 座標系選択中はレイヤを visible のままにし PMTiles を取得させる（z<15 は layer minzoom で非描画）
+    // 座標系選択中はレイヤを visible のままにし PMTiles を取得させる（z<detailMinZoom は layer minzoom で非描画）
     layerManager.setDetailVisible(currentZone !== null);
     if (showDetail) {
       map.triggerRepaint();

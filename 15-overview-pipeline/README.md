@@ -26,7 +26,7 @@ cd 15-overview-pipeline
 | `../20-data/manifest.json` | `overview` セクション追記 |
 | `../20-data/build_overview.log` | ogr2ogr ログ |
 
-**ビルド結果（QGIS 3.44.9）**: ソースセル 3,822 点（L1:274 / L2:801 / L3:2,747）、PMTiles `minzoom=0` `maxzoom=14`、source-layer `overview_L1`–`L3`。
+**ビルド結果（QGIS 3.44.9）**: ソースセル 3,822 点（L1:274 / L2:801 / L3:2,747）、PMTiles `minzoom=0` `maxzoom=13`、source-layer `overview_L1`–`L3`。
 検査レポートの推奨（0.35 / 0.08 / 0.03）と異なる場合は `overview_schema.json` の `grid_levels` を更新してから再ビルドしてください。
 
 ## ズーム設計
@@ -35,9 +35,9 @@ cd 15-overview-pipeline
 |--------|----------|------|
 | overview_L1 | 0.35° | 0–7 |
 | overview_L2 | 0.12° | 8–11 |
-| overview_L3 | 0.04° | 12–14 |
+| overview_L3 | 0.04° | 12–13 |
 
-detail PMTiles（`10-pipeline`）は z15–18。MapLibre で z15 以降 detail に切替。
+detail PMTiles（`10-pipeline`）は z13–17。**z13 で overview と detail を重ね表示**（ビューア側で overview 透明度を z12–14 でフェード）。
 
 ## リンク
 

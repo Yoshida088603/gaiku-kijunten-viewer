@@ -101,7 +101,7 @@ export class LayerManager {
               level: 3,
               layer_name: "overview_L3",
               minzoom: 12,
-              maxzoom: 14,
+              maxzoom: 13,
             },
           ];
 
@@ -113,7 +113,8 @@ export class LayerManager {
         source: OVERVIEW_SOURCE,
         "source-layer": lv.layer_name,
         minzoom: lv.minzoom,
-        maxzoom: lv.maxzoom,
+        // MapLibre maxzoom is exclusive; +1 so tile maxzoom N is visible at z=N
+        maxzoom: lv.maxzoom + 1,
         layout: {
           visibility: "visible",
         },
@@ -194,7 +195,7 @@ export class LayerManager {
         type: "circle",
         source: sourceId,
         "source-layer": sourceLayer,
-        minzoom: 15,
+        minzoom: this.config.detailMinZoom,
         layout: {
           visibility: "visible",
         },
@@ -223,7 +224,7 @@ export class LayerManager {
         type: "symbol",
         source: sourceId,
         "source-layer": sourceLayer,
-        minzoom: 15,
+        minzoom: this.config.detailMinZoom,
         layout: {
           visibility: "visible",
           "icon-image": iconImage,

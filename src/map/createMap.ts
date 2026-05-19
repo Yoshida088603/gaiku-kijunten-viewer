@@ -28,7 +28,7 @@ export function createBaseMap(
           tiles: [config.gsiStdUrl],
           tileSize: 256,
           attribution: config.gsiAttribution,
-          maxzoom: 18,
+          maxzoom: 17,
         },
       },
       layers: [
