@@ -1,50 +1,58 @@
 import { csvFilename, downloadCsv, featuresToCsv } from "@/lib/csvExport";
 import type { KijyuntenFeatureProps } from "@/data/types";
-import type { SelectionStore } from "@/map/selection";
 
-export type DownloadUiState = "hidden" | "disabled" | "active";
+export type DownloadUiState = "hidden" | "locked" | "empty" | "ready";
+
+export interface DownloadUiOptions {
+  zoom?: number;
+  minZoom?: number;
+  count?: number;
+}
 
 export class DownloadButtonController {
   constructor(
     private wrap: HTMLElement,
     private btn: HTMLButtonElement,
     private hint: HTMLElement,
-    private selection: SelectionStore,
+    private getRowsInView: () => KijyuntenFeatureProps[],
     private csvColumns: string[],
   ) {
     this.btn.addEventListener("click", () => this.onDownload());
-    this.selection.onChange(() => this.syncFromSelection());
   }
 
-  setState(state: DownloadUiState): void {
+  setState(state: DownloadUiState, opts: DownloadUiOptions = {}): void {
+    this.hint.classList.remove("is-locked");
+
     if (state === "hidden") {
       this.wrap.classList.add("hidden");
       return;
     }
-    this.wrap.classList.remove("hidden");
-    if (state === "disabled") {
-      this.btn.disabled = true;
-      this.hint.textContent = "地図上の点をクリックして選択";
-    } else {
-      this.btn.disabled = false;
-      const n = this.selection.size;
-      this.hint.textContent = n > 0 ? `${n}点を選択中` : "";
-    }
-  }
 
-  private syncFromSelection(): void {
-    if (this.wrap.classList.contains("hidden")) return;
-    if (this.selection.size > 0) {
-      this.btn.disabled = false;
-      this.hint.textContent = `${this.selection.size}点を選択中`;
-    } else {
+    this.wrap.classList.remove("hidden");
+
+    if (state === "locked") {
       this.btn.disabled = true;
-      this.hint.textContent = "地図上の点をクリックして選択";
+      const z = opts.zoom ?? 0;
+      const minZ = opts.minZoom ?? 17;
+      this.hint.classList.add("is-locked");
+      this.hint.textContent = `z${minZ}以上に拡大してください（現在 z${Math.round(z)}）`;
+      return;
     }
+
+    if (state === "empty") {
+      this.btn.disabled = true;
+      this.hint.textContent = "表示範囲に点がありません";
+      return;
+    }
+
+    const n = opts.count ?? this.getRowsInView().length;
+    this.btn.disabled = n === 0;
+    this.hint.textContent =
+      n > 0 ? `表示範囲の ${n} 点をダウンロード` : "表示範囲に点がありません";
   }
 
   private onDownload(): void {
-    const rows: KijyuntenFeatureProps[] = this.selection.getRows();
+    const rows = this.getRowsInView();
     if (rows.length === 0) return;
     const csv = featuresToCsv(rows, this.csvColumns);
     downloadCsv(csv, csvFilename());

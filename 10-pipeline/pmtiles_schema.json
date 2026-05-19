@@ -39,5 +39,5 @@
     "土地利用多角点",
     "土地利用多角点節点"
   ],
-  "detail_attributes": ["id", "name", "x", "y", "z", "kind", "sokuti", "zone", "epsg", "yohosei"]
+  "detail_attributes": ["id", "name", "kind", "dataset_name_ja", "data_system", "x", "y", "z", "sokuti", "zone", "epsg", "yohosei"]
 }

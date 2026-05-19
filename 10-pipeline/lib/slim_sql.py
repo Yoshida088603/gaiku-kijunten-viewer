@@ -45,6 +45,38 @@ def coord_pick_sql() -> tuple[str, str, str]:
     return x_expr, y_expr, z_expr
 
 
+def _nullif_not_label(col: str, label: str) -> str:
+    """空文字・列名そのもの（ヘッダ誤混入）を NULL 扱い。"""
+    return (
+        f"NULLIF(NULLIF(TRIM(\"{col}\"), ''), '{label}')"
+    )
+
+
+def name_expr_sql() -> str:
+    """data_system ごとに名称列を選び、列名文字列は除外。"""
+    gaiku_name = _nullif_not_label("街区点・補助点名称", "街区点・補助点名称")
+    tosi_name = _nullif_not_label("都市部官民基準点名称", "都市部官民基準点名称")
+    return f"""CASE COALESCE(data_system, '')
+  WHEN 'tosikanmin' THEN COALESCE(
+    {tosi_name},
+    NULLIF(TRIM("名称"), ''),
+    NULLIF(TRIM("基準点コード"), ''),
+    ''
+  )
+  WHEN 'gaiku' THEN COALESCE(
+    {gaiku_name},
+    NULLIF(TRIM("名称"), ''),
+    NULLIF(TRIM("基準点コード"), ''),
+    ''
+  )
+  ELSE COALESCE(
+    NULLIF(TRIM("名称"), ''),
+    NULLIF(TRIM("基準点コード"), ''),
+    ''
+  )
+END"""
+
+
 def base_where(extra: str | None = None) -> str:
     parts = [
         "legend_display IS NOT NULL",
@@ -67,9 +99,7 @@ def build_select_sql(
     if prefix_filter:
         where += f" AND csv_prefix = '{prefix_filter}'"
 
-    name_expr = (
-        'COALESCE("街区点・補助点名称", "都市部官民基準点名称", "名称", \'\')'
-    )
+    name_expr = name_expr_sql()
     return f"""
 SELECT
   feature_id AS id,
@@ -78,6 +108,8 @@ SELECT
   {y_expr} AS y,
   {z_expr} AS z,
   legend_display AS kind,
+  data_system,
+  dataset_name_ja,
   '{sokuti}' AS sokuti,
   {zone} AS zone,
   epsg AS epsg,

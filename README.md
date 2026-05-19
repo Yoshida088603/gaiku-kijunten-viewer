@@ -14,7 +14,7 @@
 - 国土地理院タイル（標準地図）背景
 - **overview**（広域・占有グリッド fill・z0–13、z13 で detail とラップ）と **detail**（実点・z13–17）の縮尺連動切替
 - 平面直角系（測地成果2011 等）ごとの PMTiles 読込（`manifest.json` 駆動）
-- 点のクリック選択（Ctrl+クリックで複数）→ CSV ダウンロード（縮尺 1:2988 相当以上）
+- z17 以上で表示範囲内の detail 点を CSV ダウンロード（z17 未満はボタン無効・拡大を案内）。出力列は `public/config/map.json` の `csvColumns` に従う（`id`, `name`, `kind`, `dataset_name_ja`, `data_system`, `x`, `y`, `z`, `sokuti`, `zone`, `epsg`, `yohosei`）。`name` はデータ系ごとの名称列から抽出し、`dataset_name_ja` / `data_system` で街区・都市官民などを判別できる
 - 凡例・土地利用表示トグル（QGIS スタイル準拠の色分け）
 - detail 表示時のシンボル・凡例アイコンは [`10_pipeline/60-csv2geopackage/styles/glyphs/`](../../60-csv2geopackage/styles/glyphs/) の SVG を使用（QGIS QML と同型）
 
@@ -68,11 +68,23 @@ npm run serve:local
 
 ## PMTiles 再生成（QGIS 3.44 必須）
 
+点名・データ系（`name`, `dataset_name_ja`, `data_system`）を CSV に反映するには、**detail PMTiles の再生成が必須**です（`10-pipeline/lib/slim_sql.py` と `pmtiles_schema.json` を変更した場合）。
+
 ```powershell
 cd 10-pipeline
 .\70-gpkg2pmtiles.ps1
 
-cd ..\15-overview-pipeline
+# 特定系のみ（例: 第9系）
+.\70-gpkg2pmtiles.ps1 -Zones 9
+
+cd ..
+npm run build
+```
+
+overview も更新する場合:
+
+```powershell
+cd 15-overview-pipeline
 .\75-build-overview.ps1
 ```
 

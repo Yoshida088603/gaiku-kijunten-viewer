@@ -19,8 +19,7 @@ export function evaluateScale(map: Map, config: MapConfig): ScaleFlags {
   const zoom = map.getZoom();
   const detailVisible =
     scale <= config.detailMinScale || zoom >= config.detailMinZoom;
-  const downloadAllowed =
-    scale <= config.downloadMinScale || zoom >= config.downloadMinZoom;
+  const downloadAllowed = zoom >= config.downloadMinZoom;
   return { scale, detailVisible, downloadAllowed };
 }
 

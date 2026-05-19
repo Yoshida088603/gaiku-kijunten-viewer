@@ -16,7 +16,6 @@ import type { LogicalZoneLayer } from "@/data/types";
 import { createBaseMap } from "@/map/createMap";
 import { LayerManager } from "@/map/layerManager";
 import { evaluateScale } from "@/map/scale";
-import { SelectionStore } from "@/map/selection";
 import {
   DownloadButtonController,
   type DownloadUiState,
@@ -108,12 +107,11 @@ async function main(): Promise<void> {
     }
   }
 
-  const selection = new SelectionStore(map, layerManager);
   const downloadCtrl = new DownloadButtonController(
     downloadWrap,
     downloadBtn,
     downloadHint,
-    selection,
+    () => layerManager.queryRenderedDetailInView(),
     mapConfig.csvColumns,
   );
 
@@ -154,7 +152,6 @@ async function main(): Promise<void> {
 
   async function applyZone(zl: LogicalZoneLayer): Promise<void> {
     currentZone = zl;
-    selection.clear();
     layerManager.clearDetail();
 
     await flyToZone(zl);
@@ -180,6 +177,7 @@ async function main(): Promise<void> {
     const zoom = map.getZoom();
     const zoomOk = zoom >= mapConfig.detailMinZoom - 0.01;
     const showDetail = currentZone !== null && zoomOk;
+    const downloadZoomOk = zoom >= mapConfig.downloadMinZoom - 0.01;
 
     layerManager.setOverviewVisible(hasOverview);
     if (hasOverview) {
@@ -198,17 +196,25 @@ async function main(): Promise<void> {
       }
       layerManager.setOverviewOpacity(overviewOpacity);
     }
-    // 座標系選択中はレイヤを visible のままにし PMTiles を取得させる（z<detailMinZoom は layer minzoom で非描画）
     layerManager.setDetailVisible(currentZone !== null);
     if (showDetail) {
       map.triggerRepaint();
     }
 
+    const viewCount = showDetail ? layerManager.queryRenderedDetailInView().length : 0;
     let dlState: DownloadUiState = "hidden";
-    if (flags.downloadAllowed) {
-      dlState = selection.size > 0 ? "active" : "disabled";
+    const dlOpts = { zoom, minZoom: mapConfig.downloadMinZoom, count: viewCount };
+
+    if (showDetail) {
+      if (!downloadZoomOk) {
+        dlState = "locked";
+      } else if (viewCount === 0) {
+        dlState = "empty";
+      } else {
+        dlState = "ready";
+      }
     }
-    downloadCtrl.setState(dlState);
+    downloadCtrl.setState(dlState, dlOpts);
 
     const ovNote = hasOverview
       ? flags.detailVisible
@@ -221,11 +227,17 @@ async function main(): Promise<void> {
         ? `detail: z${mapConfig.detailMinZoom}以上に拡大`
         : "detail非表示";
     const loaded = showDetail ? layerManager.countLoadedDetailFeatures() : 0;
+    const dlNote = !showDetail
+      ? "—"
+      : downloadZoomOk
+        ? viewCount > 0
+          ? `表示範囲 ${viewCount} 点`
+          : "表示範囲に点なし"
+        : `z${mapConfig.downloadMinZoom}以上でDL可`;
     statusBar!.innerHTML = [
-      // 縮尺: formatScale(flags.scale)
       `<div>タイルズーム: <strong>z${Math.round(zoom)}</strong>（地図 ${zoom.toFixed(2)}）</div>`,
       `<div>${ovNote} / ${detailNote} / 読込点≈${loaded}</div>`,
-      `<div>DL: ${flags.downloadAllowed ? "可" : "拡大してください"}</div>`,
+      `<div>DL: ${dlNote}</div>`,
       `<div>${mapConfig.gsiAttribution}</div>`,
     ].join("");
   }
@@ -249,13 +261,6 @@ async function main(): Promise<void> {
   map.on("moveend", updateVisibility);
   map.on("zoomend", updateVisibility);
   map.on("idle", updateVisibility);
-
-  map.on("click", (e) => {
-    const zoomOk = map.getZoom() >= mapConfig.detailMinZoom - 0.01;
-    if (!zoomOk || !currentZone) return;
-    selection.handleClick(e, true);
-    updateVisibility();
-  });
 
   map.on("mousemove", (e) => {
     const zoomOk = map.getZoom() >= mapConfig.detailMinZoom - 0.01;

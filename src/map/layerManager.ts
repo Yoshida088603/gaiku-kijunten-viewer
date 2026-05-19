@@ -1,5 +1,6 @@
 import type { ExpressionSpecification, Map as MaplibreMap } from "maplibre-gl";
 import type {
+  KijyuntenFeatureProps,
   KijyuntenStyleConfig,
   LogicalZoneLayer,
   ManifestOverview,
@@ -154,18 +155,8 @@ export class LayerManager {
           "circle-color": color,
           "circle-radius": radius,
           "circle-opacity": 0.92,
-          "circle-stroke-width": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            2.5,
-            0.8,
-          ],
-          "circle-stroke-color": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            "#ffcc00",
-            "#333333",
-          ],
+          "circle-stroke-width": 0.8,
+          "circle-stroke-color": "#333333",
         },
         ...layerFilter,
       });
@@ -186,13 +177,6 @@ export class LayerManager {
         },
         paint: {
           "icon-opacity": 1,
-          "icon-halo-width": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            2.5,
-            0,
-          ],
-          "icon-halo-color": "#ffcc00",
         },
         ...layerFilter,
       });
@@ -218,6 +202,10 @@ export class LayerManager {
     return [...this.detailLayerIds];
   }
 
+  getDetailCircleLayerIds(): string[] {
+    return this.detailLayerIds.filter((id) => id.endsWith("-circles"));
+  }
+
   getDetailSourceIds(): string[] {
     return [...this.detailSourceIds];
   }
@@ -236,38 +224,27 @@ export class LayerManager {
     return n;
   }
 
-  setFeatureSelected(sourceId: string, featureId: string, selected: boolean): void {
-    try {
-      this.map.setFeatureState(
-        { source: sourceId, sourceLayer: this.config.detailSourceLayer, id: featureId },
-        { selected },
-      );
-    } catch {
-      /* ignore */
-    }
-  }
+  /** 現在の地図表示範囲に描画されている detail 点（circle レイヤ基準・id 重複排除） */
+  queryRenderedDetailInView(): KijyuntenFeatureProps[] {
+    const circleIds = this.getDetailCircleLayerIds().filter((id) =>
+      Boolean(this.map.getLayer(id)),
+    );
+    if (circleIds.length === 0) return [];
 
-  clearAllFeatureStates(): void {
-    for (const sourceId of this.detailSourceIds) {
-      const features = this.map.querySourceFeatures(sourceId, {
-        sourceLayer: this.config.detailSourceLayer,
-      });
-      for (const f of features) {
-        if (f.id !== undefined) {
-          try {
-            this.map.setFeatureState(
-              {
-                source: sourceId,
-                sourceLayer: this.config.detailSourceLayer,
-                id: f.id,
-              },
-              { selected: false },
-            );
-          } catch {
-            /* ignore */
-          }
-        }
-      }
+    let features;
+    try {
+      features = this.map.queryRenderedFeatures(undefined, { layers: circleIds });
+    } catch {
+      return [];
     }
+
+    const byId = new Map<string, KijyuntenFeatureProps>();
+    for (const f of features) {
+      const props = f.properties as KijyuntenFeatureProps;
+      const id = props.id ?? f.id?.toString();
+      if (!id || byId.has(String(id))) continue;
+      byId.set(String(id), { ...props, id: String(id) });
+    }
+    return [...byId.values()];
   }
 }

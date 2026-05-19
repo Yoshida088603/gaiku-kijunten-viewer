@@ -11,5 +11,5 @@
   "defaultZoom": 5,
   "defaultZone": 9,
   "detailSourceLayer": "kijyunten",
-  "csvColumns": ["id", "name", "x", "y", "z", "kind", "sokuti", "zone", "epsg", "yohosei"]
+  "csvColumns": ["id", "name", "kind", "dataset_name_ja", "data_system", "x", "y", "z", "sokuti", "zone", "epsg", "yohosei"]
 }

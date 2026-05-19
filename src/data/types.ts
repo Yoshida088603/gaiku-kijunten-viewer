@@ -83,6 +83,8 @@ export interface KijyuntenFeatureProps {
   y?: number | string;
   z?: number | string;
   kind?: string;
+  dataset_name_ja?: string;
+  data_system?: string;
   sokuti?: string;
   zone?: number | string;
   epsg?: number | string;
