@@ -11,6 +11,8 @@ import {
   boundsForZone,
   focusCenterForBounds,
   loadZoneBoundsMap,
+  pointInBounds,
+  pointInBoundsWithMarginMeters,
 } from "@/data/zoneBounds";
 import type { LogicalZoneLayer } from "@/data/types";
 import { createBaseMap } from "@/map/createMap";
@@ -25,7 +27,6 @@ import { renderLegend } from "@/ui/legend";
 
 async function main(): Promise<void> {
   const mapEl = document.getElementById("map");
-  const zoneSelect = document.getElementById("zone-select") as HTMLSelectElement;
   const legendEl = document.getElementById("legend");
   const statusBar = document.getElementById("status-bar");
   const banner = document.getElementById("banner");
@@ -35,7 +36,6 @@ async function main(): Promise<void> {
 
   if (
     !mapEl ||
-    !zoneSelect ||
     !legendEl ||
     !statusBar ||
     !banner ||
@@ -117,20 +117,59 @@ async function main(): Promise<void> {
 
   renderLegend(legendEl, styleConfig);
 
-  zoneSelect.innerHTML = "";
-  for (const zl of zoneLayers) {
-    const opt = document.createElement("option");
-    opt.value = `${zl.sokuti}:${zl.zone}`;
-    opt.textContent = zl.label;
-    zoneSelect.appendChild(opt);
+  const AUTO_SWITCH_HYSTERESIS_METERS = 800;
+  let currentZone: LogicalZoneLayer | null = null;
+  let zoneApplyInProgress = false;
+
+  function zoneKey(zl: LogicalZoneLayer): string {
+    return `${zl.sokuti}:${zl.zone}`;
   }
 
-  let currentZone: LogicalZoneLayer | null = null;
+  const autoZoneCandidates = zoneLayers
+    .map((zoneLayer) => {
+      const bounds = zoneBoundsMap.get(zoneLayer.zone);
+      return bounds ? { key: zoneKey(zoneLayer), zoneLayer, bounds } : null;
+    })
+    .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
 
-  function findZone(key: string): LogicalZoneLayer | undefined {
-    const [sokuti, zoneStr] = key.split(":");
-    const zone = Number(zoneStr);
-    return zoneLayers.find((z) => z.sokuti === sokuti && z.zone === zone);
+  const autoZoneByKey = new Map(autoZoneCandidates.map((entry) => [entry.key, entry]));
+
+  function detectZoneFromCenter(lng: number, lat: number): LogicalZoneLayer | null {
+    if (currentZone) {
+      const current = autoZoneByKey.get(zoneKey(currentZone));
+      if (
+        current &&
+        pointInBoundsWithMarginMeters(
+          lng,
+          lat,
+          current.bounds,
+          -AUTO_SWITCH_HYSTERESIS_METERS,
+        )
+      ) {
+        return current.zoneLayer;
+      }
+    }
+
+    for (const candidate of autoZoneCandidates) {
+      if (
+        pointInBoundsWithMarginMeters(
+          lng,
+          lat,
+          candidate.bounds,
+          AUTO_SWITCH_HYSTERESIS_METERS,
+        )
+      ) {
+        return candidate.zoneLayer;
+      }
+    }
+
+    for (const candidate of autoZoneCandidates) {
+      if (pointInBounds(lng, lat, candidate.bounds)) {
+        return candidate.zoneLayer;
+      }
+    }
+
+    return null;
   }
 
   async function flyToZone(zl: LogicalZoneLayer): Promise<void> {
@@ -150,25 +189,60 @@ async function main(): Promise<void> {
     });
   }
 
-  async function applyZone(zl: LogicalZoneLayer): Promise<void> {
-    currentZone = zl;
-    layerManager.clearDetail();
-
-    await flyToZone(zl);
-
-    try {
-      layerManager.loadDetailZone(zl);
-      layerManager.setDetailVisible(true);
-      map.triggerRepaint();
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      banner!.textContent = `detail レイヤ読込エラー: ${msg}`;
-      banner!.classList.remove("hidden");
-      console.error(e);
+  async function applyZone(
+    zl: LogicalZoneLayer,
+    opts: { flyToBounds: boolean },
+  ): Promise<void> {
+    if (zoneApplyInProgress) return;
+    if (currentZone && zoneKey(currentZone) === zoneKey(zl)) {
+      updateVisibility();
       return;
     }
 
-    updateVisibility();
+    zoneApplyInProgress = true;
+    try {
+      currentZone = zl;
+      layerManager.clearDetail();
+
+      if (opts.flyToBounds) {
+        await flyToZone(zl);
+      }
+
+      try {
+        layerManager.loadDetailZone(zl);
+        layerManager.setDetailVisible(true);
+        map.triggerRepaint();
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        banner!.textContent = `detail レイヤ読込エラー: ${msg}`;
+        banner!.classList.remove("hidden");
+        console.error(e);
+        currentZone = null;
+        return;
+      }
+    } finally {
+      zoneApplyInProgress = false;
+      updateVisibility();
+    }
+  }
+
+  async function applyZoneManual(zl: LogicalZoneLayer): Promise<void> {
+    await applyZone(zl, { flyToBounds: true });
+  }
+
+  async function applyZoneAuto(zl: LogicalZoneLayer): Promise<void> {
+    await applyZone(zl, { flyToBounds: false });
+  }
+
+  async function maybeAutoSwitchZoneByCenter(): Promise<void> {
+    if (zoneApplyInProgress) return;
+    const zoomOk = map.getZoom() >= mapConfig.detailMinZoom - 0.01;
+    if (!zoomOk) return;
+    const center = map.getCenter();
+    const next = detectZoneFromCenter(center.lng, center.lat);
+    if (!next) return;
+    if (currentZone && zoneKey(currentZone) === zoneKey(next)) return;
+    await applyZoneAuto(next);
   }
 
   function updateVisibility(): void {
@@ -226,6 +300,7 @@ async function main(): Promise<void> {
       : currentZone
         ? `detail: z${mapConfig.detailMinZoom}以上に拡大`
         : "detail非表示";
+    const zoneNote = currentZone ? currentZone.label : "系未選択";
     const loaded = showDetail ? layerManager.countLoadedDetailFeatures() : 0;
     const dlNote = !showDetail
       ? "—"
@@ -236,6 +311,7 @@ async function main(): Promise<void> {
         : `z${mapConfig.downloadMinZoom}以上でDL可`;
     statusBar!.innerHTML = [
       `<div>タイルズーム: <strong>z${Math.round(zoom)}</strong>（地図 ${zoom.toFixed(2)}）</div>`,
+      `<div>系: ${zoneNote}（自動）</div>`,
       `<div>${ovNote} / ${detailNote} / 読込点≈${loaded}</div>`,
       `<div>DL: ${dlNote}</div>`,
       `<div>${mapConfig.gsiAttribution}</div>`,
@@ -245,20 +321,20 @@ async function main(): Promise<void> {
   const defaultKey = zoneLayers.find(
     (z) => z.zone === mapConfig.defaultZone && z.sokuti === "2011",
   );
-  if (defaultKey) {
-    zoneSelect.value = `${defaultKey.sokuti}:${defaultKey.zone}`;
-    await applyZone(defaultKey);
+  const center = map.getCenter();
+  const initialAutoZone = detectZoneFromCenter(center.lng, center.lat);
+  if (initialAutoZone) {
+    await applyZoneAuto(initialAutoZone);
+  } else if (defaultKey) {
+    await applyZoneManual(defaultKey);
   } else if (zoneLayers.length > 0) {
-    zoneSelect.selectedIndex = 0;
-    await applyZone(zoneLayers[0]);
+    await applyZoneManual(zoneLayers[0]);
   }
 
-  zoneSelect.addEventListener("change", () => {
-    const zl = findZone(zoneSelect.value);
-    if (zl) applyZone(zl);
+  map.on("moveend", () => {
+    updateVisibility();
+    void maybeAutoSwitchZoneByCenter();
   });
-
-  map.on("moveend", updateVisibility);
   map.on("zoomend", updateVisibility);
   map.on("idle", updateVisibility);
 

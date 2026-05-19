@@ -65,6 +65,45 @@ export function pointInBounds(
   return lng >= minLon && lng <= maxLon && lat >= minLat && lat <= maxLat;
 }
 
+const METERS_PER_DEG_LAT = 111320;
+const MIN_COS_LAT = 0.1;
+
+function metersToLatDegrees(meters: number): number {
+  return meters / METERS_PER_DEG_LAT;
+}
+
+function metersToLngDegrees(meters: number, lat: number): number {
+  const cosLat = Math.max(MIN_COS_LAT, Math.abs(Math.cos((lat * Math.PI) / 180)));
+  return meters / (METERS_PER_DEG_LAT * cosLat);
+}
+
+/**
+ * marginMeters:
+ * - 正値: bounds を外側に広げる
+ * - 負値: bounds を内側に縮める（縮めすぎた場合は常に false）
+ */
+export function pointInBoundsWithMarginMeters(
+  lng: number,
+  lat: number,
+  b: LngLatBounds,
+  marginMeters: number,
+): boolean {
+  if (marginMeters === 0) return pointInBounds(lng, lat, b);
+
+  const latDelta = metersToLatDegrees(Math.abs(marginMeters));
+  const lngDelta = metersToLngDegrees(Math.abs(marginMeters), lat);
+  const [[minLon, minLat], [maxLon, maxLat]] = b;
+
+  const shrink = marginMeters < 0;
+  const adjMinLon = shrink ? minLon + lngDelta : minLon - lngDelta;
+  const adjMaxLon = shrink ? maxLon - lngDelta : maxLon + lngDelta;
+  const adjMinLat = shrink ? minLat + latDelta : minLat - latDelta;
+  const adjMaxLat = shrink ? maxLat - latDelta : maxLat + latDelta;
+
+  if (adjMinLon > adjMaxLon || adjMinLat > adjMaxLat) return false;
+  return lng >= adjMinLon && lng <= adjMaxLon && lat >= adjMinLat && lat <= adjMaxLat;
+}
+
 /** 系範囲内なら preferred（例: 東京）へ。範囲外なら範囲の中心 */
 export function focusCenterForBounds(
   b: LngLatBounds | null,
