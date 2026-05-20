@@ -2,6 +2,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 
 import { loadMapConfig, loadStyleConfig } from "@/config/loadConfig";
+import { loadSiteConfig } from "@/config/loadSiteConfig";
 import {
   fetchManifest,
   getOverview,
@@ -17,7 +18,6 @@ import {
 import type { LogicalZoneLayer } from "@/data/types";
 import { createBaseMap } from "@/map/createMap";
 import { LayerManager } from "@/map/layerManager";
-import { evaluateScale } from "@/map/scale";
 import {
   DownloadButtonController,
   type DownloadUiState,
@@ -25,13 +25,20 @@ import {
 import { fallbackIconId, loadKijyuntenIcons } from "@/style/loadIcons";
 import { renderLegend } from "@/ui/legend";
 import { initLegendPanelToggle } from "@/ui/legendPanel";
+import { applySiteBranding, initHelpDialog } from "@/ui/helpDialog";
+import { renderStatusBar, type StatusBarContext } from "@/ui/statusBar";
 
 async function main(): Promise<void> {
   const mapEl = document.getElementById("map");
   const panelShell = document.getElementById("panel-shell");
   const panelToggle = document.getElementById("panel-toggle") as HTMLButtonElement | null;
   const legendEl = document.getElementById("legend");
-  const statusBar = document.getElementById("status-bar");
+  const statusHint = document.getElementById("status-hint");
+  const statusDetailsInner = document.getElementById("status-details-inner");
+  const helpDialog = document.getElementById("help-dialog") as HTMLDialogElement | null;
+  const helpOpen = document.getElementById("help-open") as HTMLButtonElement | null;
+  const helpClose = document.getElementById("help-close") as HTMLButtonElement | null;
+  const helpBody = document.getElementById("help-dialog-body");
   const banner = document.getElementById("banner");
   const downloadWrap = document.getElementById("download-wrap");
   const downloadBtn = document.getElementById("download-btn") as HTMLButtonElement;
@@ -42,7 +49,12 @@ async function main(): Promise<void> {
     !panelShell ||
     !panelToggle ||
     !legendEl ||
-    !statusBar ||
+    !statusHint ||
+    !statusDetailsInner ||
+    !helpDialog ||
+    !helpOpen ||
+    !helpClose ||
+    !helpBody ||
     !banner ||
     !downloadWrap ||
     !downloadBtn ||
@@ -51,10 +63,17 @@ async function main(): Promise<void> {
     throw new Error("Required DOM elements missing");
   }
 
-  const [mapConfig, styleConfig] = await Promise.all([
+  const hintEl: HTMLElement = statusHint;
+  const detailsEl: HTMLElement = statusDetailsInner;
+
+  const [mapConfig, styleConfig, siteConfig] = await Promise.all([
     loadMapConfig(),
     loadStyleConfig(),
+    loadSiteConfig(),
   ]);
+
+  applySiteBranding(siteConfig);
+  initHelpDialog(helpDialog, helpOpen, helpClose, helpBody, siteConfig);
 
   const map = createBaseMap(mapEl, mapConfig);
   await new Promise<void>((resolve) => {
@@ -252,7 +271,6 @@ async function main(): Promise<void> {
   }
 
   function updateVisibility(): void {
-    const flags = evaluateScale(map, mapConfig);
     const hasOverview = overview !== null;
     const zoom = map.getZoom();
     const zoomOk = zoom >= mapConfig.detailMinZoom - 0.01;
@@ -296,32 +314,15 @@ async function main(): Promise<void> {
     }
     downloadCtrl.setState(dlState, dlOpts);
 
-    const ovNote = hasOverview
-      ? flags.detailVisible
-        ? "overview(薄)+detail"
-        : "overview+GSI"
-      : "GSIのみ";
-    const detailNote = showDetail
-      ? "detail表示"
-      : currentZone
-        ? `detail: z${mapConfig.detailMinZoom}以上に拡大`
-        : "detail非表示";
-    const zoneNote = currentZone ? currentZone.label : "系未選択";
-    const loaded = showDetail ? layerManager.countLoadedDetailFeatures() : 0;
-    const dlNote = !showDetail
-      ? "—"
-      : downloadZoomOk
-        ? viewCount > 0
-          ? `表示範囲 ${viewCount} 点`
-          : "表示範囲に点なし"
-        : `z${mapConfig.downloadMinZoom}以上でDL可`;
-    statusBar!.innerHTML = [
-      `<div>タイルズーム: <strong>z${Math.round(zoom)}</strong>（地図 ${zoom.toFixed(2)}）</div>`,
-      `<div>系: ${zoneNote}（自動）</div>`,
-      `<div>${ovNote} / ${detailNote} / 読込点≈${loaded}</div>`,
-      `<div>DL: ${dlNote}</div>`,
-      `<div>${mapConfig.gsiAttribution}</div>`,
-    ].join("");
+    const statusCtx: StatusBarContext = {
+      zoom,
+      mapConfig,
+      showDetail,
+      currentZone,
+      downloadZoomOk,
+      viewCount,
+    };
+    renderStatusBar(hintEl, detailsEl, statusCtx);
   }
 
   const e2eEnabled =
@@ -347,8 +348,15 @@ async function main(): Promise<void> {
         statusDl: string;
         downloadMinZoom: number;
       } {
-        const status = statusBar!.innerText;
-        const dlLine = status.split("\n").find((l) => l.startsWith("DL:")) ?? "";
+        const status =
+          document.getElementById("status-details-inner")?.textContent ?? "";
+        const dlLine =
+          status
+            .split(/\r?\n/)
+            .map((l) => l.trim())
+            .find((l) => l.startsWith("CSV:")) ??
+          [...status.matchAll(/CSV:[^\n]*/g)].pop()?.[0] ??
+          "";
         return {
           wrapHidden: downloadWrap.classList.contains("hidden"),
           btnDisabled: downloadBtn.disabled,

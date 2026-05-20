@@ -1,3 +1,24 @@
+export interface SiteHelpSection {
+  heading: string;
+  items: string[];
+}
+
+export interface SiteHelpConfig {
+  sections: SiteHelpSection[];
+  dataSourceUrl: string;
+  dataSourceLabel: string;
+  repoUrl: string;
+  repoLabel: string;
+}
+
+export interface SiteConfig {
+  title: string;
+  description: string;
+  /** 凡例パネル下部に常時表示する短い注意書き */
+  panelNotice?: string;
+  help: SiteHelpConfig;
+}
+
 export interface MapConfig {
   detailMinScale: number;
   downloadMinScale: number;

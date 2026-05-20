@@ -62,8 +62,8 @@ await page.waitForFunction(
 
 await page.waitForFunction(
   () => {
-    const t = document.getElementById("status-bar")?.innerText ?? "";
-    return /系:.*（自動）/.test(t) && !/系未選択/.test(t);
+    const t = document.getElementById("status-details-inner")?.textContent ?? "";
+    return /座標: 測地成果2011・\d+系（EPSG\d+）/.test(t);
   },
   { timeout: 60_000 },
 );
@@ -85,8 +85,8 @@ await setView(belowZoom);
 
 await page.waitForFunction(
   () => {
-    const t = document.getElementById("status-bar")?.innerText ?? "";
-    return /detail表示/.test(t);
+    const t = document.getElementById("status-details-inner")?.textContent ?? "";
+    return /CSV: ズーム\d+以上で利用可/.test(t);
   },
   { timeout: 30_000 },
 );
@@ -102,7 +102,7 @@ assert(
   `locked hint: ${low.hint}`,
 );
 assert(
-  new RegExp(`z${MIN_ZOOM}以上でDL可`).test(low.statusDl),
+  new RegExp(`CSV: ズーム${MIN_ZOOM}以上で利用可`).test(low.statusDl),
   `status: ${low.statusDl}`,
 );
 
@@ -135,8 +135,8 @@ assert(
   `CSV download must be enabled at z${MIN_ZOOM}: ${high.hint}`,
 );
 assert(
-  /表示範囲.*点/.test(high.statusDl) || /点をダウンロード/.test(high.hint),
-  `DL ready: status=${high.statusDl} hint=${high.hint}`,
+  /CSV: 表示範囲 \d+ 点/.test(high.statusDl) || /点をダウンロード/.test(high.hint),
+  `CSV ready: status=${high.statusDl} hint=${high.hint}`,
 );
 
 const critical = errors.filter(

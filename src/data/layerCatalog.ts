@@ -12,12 +12,12 @@ const SOKUTI_LABEL: Record<string, string> = {
 };
 
 function zoneLabel(zone: number): string {
-  return `第${zone}系`;
+  return `${zone}系`;
 }
 
 function layerLabel(sokuti: string, zone: number, epsg: number): string {
   const sj = SOKUTI_LABEL[sokuti] ?? sokuti;
-  return `${sj}・${zoneLabel(zone)}（EPSG:${epsg}）`;
+  return `${sj}・${zoneLabel(zone)}（EPSG${epsg}）`;
 }
 
 function isOverviewPath(path: string): boolean {

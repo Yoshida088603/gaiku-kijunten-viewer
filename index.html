@@ -3,7 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>街区基準点ビューア</title>
+    <meta
+      name="description"
+      content="街区基準点等・土地活用推進調査・都市部官民基準点等を国土地理院地図上で閲覧し、拡大時に表示範囲の点をCSVで取得できます。"
+    />
+    <title>街区基準点等の地図表示</title>
     <link
       href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
       rel="stylesheet"
@@ -15,14 +19,14 @@
       <div id="panel-shell" class="panel-shell">
         <aside id="panel" class="panel">
           <header class="panel-header">
-            <h1 class="panel-title">街区基準点</h1>
+            <h1 id="panel-title" class="panel-title">街区基準点等の地図表示</h1>
             <button
               id="panel-toggle"
               type="button"
               class="panel-toggle"
               aria-expanded="true"
               aria-controls="panel-body"
-              aria-label="凡例を閉じる"
+              aria-label="パネルを閉じる"
             >
               <span class="panel-toggle-bars" aria-hidden="true">
                 <span></span>
@@ -34,15 +38,48 @@
           <div id="panel-body" class="panel-body">
             <h2 class="legend-heading">凡例</h2>
             <div id="legend"></div>
+            <footer class="panel-footer">
+              <p id="panel-notice" class="panel-notice"></p>
+              <button
+                id="help-open"
+                type="button"
+                class="panel-help-btn"
+                aria-haspopup="dialog"
+              >
+                使い方
+              </button>
+            </footer>
           </div>
         </aside>
       </div>
+      <dialog id="help-dialog" class="help-dialog" aria-labelledby="help-dialog-title">
+        <div class="help-dialog-inner">
+          <header class="help-dialog-header">
+            <h2 id="help-dialog-title">使い方</h2>
+            <button
+              id="help-close"
+              type="button"
+              class="help-dialog-close"
+              aria-label="閉じる"
+            >
+              ×
+            </button>
+          </header>
+          <div id="help-dialog-body" class="help-dialog-body"></div>
+        </div>
+      </dialog>
       <div class="top-left-stack">
         <div id="banner" class="banner hidden" role="status"></div>
-        <div id="status-bar" class="status-bar"></div>
+        <div id="status-bar" class="status-bar">
+          <p id="status-hint" class="status-hint"></p>
+          <details id="status-details" class="status-details">
+            <summary>詳細情報</summary>
+            <div id="status-details-inner" class="status-details-inner"></div>
+          </details>
+        </div>
       </div>
       <div id="download-wrap" class="download-wrap hidden">
-        <button id="download-btn" type="button" disabled>CSVダウンロード</button>
+        <button id="download-btn" type="button" disabled>表示範囲をCSV</button>
         <span id="download-hint" class="download-hint"></span>
       </div>
     </div>

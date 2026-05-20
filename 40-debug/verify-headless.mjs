@@ -22,7 +22,7 @@ page.on("pageerror", (err) => errors.push(String(err)));
 await page.goto(URL, { waitUntil: "networkidle", timeout: 120_000 });
 await page.waitForTimeout(12_000);
 
-const status = await page.locator("#status-bar").innerText();
+const status = await page.locator("#status-details-inner").evaluate((el) => el.textContent ?? "");
 const hasExprErr = errors.some((e) =>
   /zoom.*expression may only be used/i.test(e),
 );
@@ -30,7 +30,7 @@ const hasLayerMissing = errors.some((e) =>
   /does not exist in the map's style/i.test(e),
 );
 
-const loadedMatch = status.match(/読込点≈(\d+)/);
+const loadedMatch = status.match(/読込 約(\d+)点/);
 const loaded = loadedMatch ? Number(loadedMatch[1]) : -1;
 
 console.log("statusBar:", status.replace(/\n/g, " | "));

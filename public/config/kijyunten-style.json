@@ -31,7 +31,7 @@
       "icon": "icon-san-setsu.svg",
       "kinds": ["街区三角点節点", "土地利用三角点節点"],
       "sizeRatio": 0.889,
-      "legendSizePx": 26,
+      "legendSizePx": 32,
       "order": 3
     },
     {
@@ -51,7 +51,7 @@
       "icon": "icon-ta-setsu.svg",
       "kinds": ["街区多角点節点", "土地利用多角点節点"],
       "sizeRatio": 0.889,
-      "legendSizePx": 26,
+      "legendSizePx": 32,
       "order": 5
     }
   ]
