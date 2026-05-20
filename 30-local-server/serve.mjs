@@ -118,6 +118,10 @@ function sendFile(req, res, filePath) {
     "Content-Type": contentType,
     "Accept-Ranges": "bytes",
   };
+  if (ext === ".html") {
+    headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    headers.Pragma = "no-cache";
+  }
 
   const range = parseRange(req.headers.range, stat.size);
   if (range === "unsatisfiable") {

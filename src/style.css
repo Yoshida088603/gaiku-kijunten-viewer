@@ -2,6 +2,26 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* 地図全画面 UI: ページ全体のスクロール・ズームによるレイアウト崩れを防ぐ */
+html.touch-ui,
+html.touch-ui body {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 html,
 body,
 #app,
@@ -14,6 +34,7 @@ body,
 
 #app {
   position: relative;
+  touch-action: manipulation;
 }
 
 .panel-shell {
@@ -173,7 +194,7 @@ body,
 
 .field select {
   padding: 6px 8px;
-  font-size: 0.85rem;
+  font-size: max(16px, 0.85rem);
 }
 
 .legend-heading {
@@ -215,7 +236,12 @@ body,
   padding: 5px 6px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
-  font-size: 0.75rem;
+  /* 16px 未満だと iOS Safari がフォーカス時にページ全体を拡大し、blur 後も戻らない */
+  font-size: max(16px, 0.75rem);
+}
+
+.address-search-input::placeholder {
+  font-size: 16px;
 }
 
 .address-search-submit,
@@ -269,7 +295,7 @@ body,
   padding: 5px 6px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: max(16px, 0.75rem);
 }
 
 #legend {
@@ -574,6 +600,19 @@ body,
   font-size: 0.7rem !important;
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .address-search-input,
+  .address-search-select,
+  .field select {
+    font-size: 16px;
+  }
+
+  .download-wrap,
+  .contact-footer {
+    position: fixed;
+  }
+}
+
 @media (max-width: 600px) {
   .top-left-stack {
     max-width: min(100%, calc(50vw - 18px));
@@ -608,7 +647,7 @@ body,
   }
 
   .panel {
-    max-height: min(45vh, calc(100vh - 100px));
+    max-height: min(280px, 42svh);
   }
 
   .panel-shell.is-collapsed {

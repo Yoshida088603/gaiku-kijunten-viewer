@@ -6,6 +6,7 @@ import {
   searchGsiAddress,
   type GsiAddressHit,
 } from "@/geocode/gsiAddressSearch";
+import { bindMobileFormInputs } from "@/ui/mobileLayout";
 
 export function initAddressSearch(
   root: HTMLElement,
@@ -34,6 +35,8 @@ export function initAddressSearch(
 
   const apiUrl = mapConfig.gsiAddressSearchUrl ?? DEFAULT_GSI_ADDRESS_SEARCH_URL;
   const searchZoom = mapConfig.detailMinZoom + 0.5;
+
+  bindMobileFormInputs(inputEl, select);
 
   let hits: GsiAddressHit[] = [];
   let searching = false;

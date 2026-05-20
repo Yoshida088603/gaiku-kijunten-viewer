@@ -2,7 +2,14 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
     <meta
       name="description"
       content="街区基準点等・土地活用推進調査・都市部官民基準点等を国土地理院地図上で閲覧し、拡大時に表示範囲の点をCSVで取得できます。"
@@ -45,7 +52,8 @@
                   <input
                     id="address-search-input"
                     class="address-search-input"
-                    type="search"
+                    type="text"
+                    inputmode="search"
                     name="q"
                     autocomplete="street-address"
                     placeholder="例: 東京都北区西ヶ原"

@@ -24,6 +24,7 @@ import {
 } from "@/ui/downloadButton";
 import { fallbackIconId, loadKijyuntenIcons } from "@/style/loadIcons";
 import { initAddressSearch } from "@/ui/addressSearch";
+import { ensureMobileViewport, initMobileBottomChrome } from "@/ui/mobileLayout";
 import { renderLegend } from "@/ui/legend";
 import { initLegendPanelToggle } from "@/ui/legendPanel";
 import { applyContactFooter } from "@/ui/contactFooter";
@@ -31,6 +32,8 @@ import { applySiteBranding, initHelpDialog } from "@/ui/helpDialog";
 import { renderStatusBar, type StatusBarContext } from "@/ui/statusBar";
 
 async function main(): Promise<void> {
+  ensureMobileViewport();
+
   const mapEl = document.getElementById("map");
   const panelShell = document.getElementById("panel-shell");
   const panelToggle = document.getElementById("panel-toggle") as HTMLButtonElement | null;
@@ -78,6 +81,10 @@ async function main(): Promise<void> {
 
   applySiteBranding(siteConfig);
   applyContactFooter(siteConfig);
+  initMobileBottomChrome(
+    downloadWrap,
+    document.getElementById("contact-footer"),
+  );
   initHelpDialog(helpDialog, helpOpen, helpClose, helpBody, siteConfig);
 
   const map = createBaseMap(mapEl, mapConfig);
