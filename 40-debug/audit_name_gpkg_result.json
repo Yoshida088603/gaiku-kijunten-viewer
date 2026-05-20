@@ -1,0 +1,484 @@
+{
+  "gpkg_dir": "C:\\Users\\Shiro\\Desktop\\国土交通省\\20260219昨年納品DVD\\05ホームページ公開用データ及びプログラム\\20_output\\60-csv2geopackage",
+  "files": 14,
+  "total_mismatch_all": 377750,
+  "per_file": [
+    {
+      "file": "測地成果2011_zone01.gpkg",
+      "total_mismatch_old_vs_new": 5104,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 2440
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 2243
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 355
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 66
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone02.gpkg",
+      "total_mismatch_old_vs_new": 33580,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 13808
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 12245
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官多角点",
+          "count": 5008
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 2129
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 323
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官三角点",
+          "count": 67
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone03.gpkg",
+      "total_mismatch_old_vs_new": 21063,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 10515
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 8608
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 1353
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 441
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官多角点",
+          "count": 146
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone04.gpkg",
+      "total_mismatch_old_vs_new": 18433,
+      "mismatch_by_kind": [
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官多角点",
+          "count": 7768
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 5243
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 4344
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 835
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官三角点",
+          "count": 139
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 104
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone05.gpkg",
+      "total_mismatch_old_vs_new": 17821,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 9965
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 4493
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官多角点",
+          "count": 1820
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 1337
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 173
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官三角点",
+          "count": 33
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone06.gpkg",
+      "total_mismatch_old_vs_new": 69325,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 24708
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官多角点",
+          "count": 22473
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 16644
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 4027
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 894
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官三角点",
+          "count": 579
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone07.gpkg",
+      "total_mismatch_old_vs_new": 59319,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 24651
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 19455
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官多角点",
+          "count": 9395
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 3665
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 2123
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官三角点",
+          "count": 30
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone08.gpkg",
+      "total_mismatch_old_vs_new": 41591,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 17456
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 13356
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官多角点",
+          "count": 6994
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 2444
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 1184
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官三角点",
+          "count": 157
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone09.gpkg",
+      "total_mismatch_old_vs_new": 73898,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 37608
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 30686
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 3856
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 1748
+        }
+      ],
+      "samples": {
+        "H_13113.csv:682": {
+          "feature_id": "H_13113.csv:682",
+          "csv_prefix": "H",
+          "data_system": "gaiku",
+          "kijyunten_meisho": "補助点",
+          "街区点・補助点名称": "2B171",
+          "基準点等名称": null,
+          "基準点コード": "KG3131132B171",
+          "name_old": "2B171",
+          "name_new": "2B171"
+        },
+        "T_S_13113.csv:53": {
+          "feature_id": "T_S_13113.csv:53",
+          "csv_prefix": "T",
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "街区点・補助点名称": null,
+          "基準点等名称": "1A086",
+          "基準点コード": "KG3131131A086",
+          "name_old": "KG3131131A086",
+          "name_new": "1A086"
+        },
+        "T_13113.csv:22": {
+          "feature_id": "T_13113.csv:22",
+          "csv_prefix": "T",
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "街区点・補助点名称": null,
+          "基準点等名称": "10A22",
+          "基準点コード": "KG21311310A22",
+          "name_old": "KG21311310A22",
+          "name_new": "10A22"
+        }
+      }
+    },
+    {
+      "file": "測地成果2011_zone10.gpkg",
+      "total_mismatch_old_vs_new": 20310,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 12496
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 6329
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 1154
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 331
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone11.gpkg",
+      "total_mismatch_old_vs_new": 2427,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 1092
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 966
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 198
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官多角点",
+          "count": 162
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 9
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone12.gpkg",
+      "total_mismatch_old_vs_new": 10393,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 7850
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 1572
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 895
+        },
+        {
+          "data_system": "tosikanmin",
+          "kijyunten_meisho": "都市官多角点",
+          "count": 47
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 29
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone13.gpkg",
+      "total_mismatch_old_vs_new": 2736,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 1824
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点節点",
+          "count": 685
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 221
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点節点",
+          "count": 6
+        }
+      ],
+      "samples": {}
+    },
+    {
+      "file": "測地成果2011_zone15.gpkg",
+      "total_mismatch_old_vs_new": 1750,
+      "mismatch_by_kind": [
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区多角点",
+          "count": 1630
+        },
+        {
+          "data_system": "gaiku",
+          "kijyunten_meisho": "街区三角点",
+          "count": 120
+        }
+      ],
+      "samples": {}
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "samples": [
+    {
+      "feature_id": "H_13113.csv:682",
+      "expected": "2B171",
+      "gpkg": "2B171",
+      "pmtiles": "2B171",
+      "ok": true
+    },
+    {
+      "feature_id": "T_S_13113.csv:53",
+      "expected": "1A086",
+      "gpkg": "1A086",
+      "pmtiles": "1A086",
+      "ok": true
+    },
+    {
+      "feature_id": "T_13113.csv:22",
+      "expected": "10A22",
+      "gpkg": "10A22",
+      "pmtiles": "10A22",
+      "ok": true
+    }
+  ],
+  "passed": 3,
+  "total": 3,
+  "tosikanmin_zone02": {
+    "zone02_tosikanmin": [
+      {
+        "feature_id": "TKS_44201.csv:1",
+        "基準点等名称": "K6-3",
+        "基準点コード": null,
+        "pmtiles_name": "K6-3",
+        "ok": true
+      },
+      {
+        "feature_id": "TKS_44201.csv:2",
+        "基準点等名称": "M5-3",
+        "基準点コード": null,
+        "pmtiles_name": "M5-3",
+        "ok": true
+      },
+      {
+        "feature_id": "TKS_44201.csv:3",
+        "基準点等名称": "N5-1",
+        "基準点コード": null,
+        "pmtiles_name": "N5-1",
+        "ok": true
+      },
+      {
+        "feature_id": "TKS_44201.csv:4",
+        "基準点等名称": "R4-1",
+        "基準点コード": null,
+        "pmtiles_name": "R4-1",
+        "ok": true
+      },
+      {
+        "feature_id": "TKS_44201.csv:5",
+        "基準点等名称": "R4-2",
+        "基準点コード": null,
+        "pmtiles_name": "R4-2",
+        "ok": true
+      }
+    ]
+  },
+  "tosikanmin_passed": 5
+}

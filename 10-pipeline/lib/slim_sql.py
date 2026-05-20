@@ -56,22 +56,28 @@ def name_expr_sql() -> str:
     """data_system ごとに名称列を選び、列名文字列は除外。"""
     gaiku_name = _nullif_not_label("街区点・補助点名称", "街区点・補助点名称")
     tosi_name = _nullif_not_label("都市部官民基準点名称", "都市部官民基準点名称")
+    meisho = _nullif_not_label("基準点等名称", "基準点等名称")
+    generic_name = 'NULLIF(TRIM("名称"), \'\')'
+    code = 'NULLIF(TRIM("基準点コード"), \'\')'
     return f"""CASE COALESCE(data_system, '')
   WHEN 'tosikanmin' THEN COALESCE(
     {tosi_name},
-    NULLIF(TRIM("名称"), ''),
-    NULLIF(TRIM("基準点コード"), ''),
+    {meisho},
+    {generic_name},
+    {code},
     ''
   )
   WHEN 'gaiku' THEN COALESCE(
     {gaiku_name},
-    NULLIF(TRIM("名称"), ''),
-    NULLIF(TRIM("基準点コード"), ''),
+    {meisho},
+    {generic_name},
+    {code},
     ''
   )
   ELSE COALESCE(
-    NULLIF(TRIM("名称"), ''),
-    NULLIF(TRIM("基準点コード"), ''),
+    {meisho},
+    {generic_name},
+    {code},
     ''
   )
 END"""
