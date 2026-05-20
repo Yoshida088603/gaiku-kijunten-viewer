@@ -7,7 +7,8 @@ export function initLegendPanelToggle(shell: HTMLElement, toggle: HTMLButtonElem
     toggle.setAttribute("aria-label", expanded ? "凡例を閉じる" : "凡例を開く");
   };
 
-  setExpanded(true);
+  const compactLayout = window.matchMedia("(max-width: 600px)");
+  setExpanded(!compactLayout.matches);
 
   toggle.addEventListener("click", () => {
     const expanded = toggle.getAttribute("aria-expanded") === "true";

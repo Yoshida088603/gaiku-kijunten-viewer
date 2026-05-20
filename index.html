@@ -12,7 +12,6 @@
   <body>
     <div id="app">
       <div id="map"></div>
-      <div id="banner" class="banner hidden" role="status"></div>
       <div id="panel-shell" class="panel-shell">
         <aside id="panel" class="panel">
           <header class="panel-header">
@@ -38,7 +37,10 @@
           </div>
         </aside>
       </div>
-      <div id="status-bar" class="status-bar"></div>
+      <div class="top-left-stack">
+        <div id="banner" class="banner hidden" role="status"></div>
+        <div id="status-bar" class="status-bar"></div>
+      </div>
       <div id="download-wrap" class="download-wrap hidden">
         <button id="download-btn" type="button" disabled>CSVダウンロード</button>
         <span id="download-hint" class="download-hint"></span>
