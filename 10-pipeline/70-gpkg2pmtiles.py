@@ -305,6 +305,15 @@ def main() -> int:
             print(f"ERROR {name}: {e}", file=sys.stderr)
 
     if not args.dry_run:
+        manifest_path = output_dir / "manifest.json"
+        preserved_overview = None
+        if manifest_path.is_file():
+            try:
+                existing = json.loads(manifest_path.read_text(encoding="utf-8"))
+                preserved_overview = existing.get("overview")
+            except json.JSONDecodeError:
+                pass
+
         manifest = {
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "dev_allow_non_344": args.dev_allow_non_344,
@@ -314,7 +323,8 @@ def main() -> int:
             "layers": all_records,
             "errors": errors,
         }
-        manifest_path = output_dir / "manifest.json"
+        if preserved_overview:
+            manifest["overview"] = preserved_overview
         manifest_path.write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
         )
