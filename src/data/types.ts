@@ -28,6 +28,8 @@ export interface MapConfig {
   dataBaseUrl: string;
   gsiStdUrl: string;
   gsiAttribution: string;
+  /** 国土地理院 住所検索 API（省略時は gsiAddressSearch のデフォルト URL） */
+  gsiAddressSearchUrl?: string;
   defaultCenter: [number, number];
   defaultZoom: number;
   defaultZone: number;

@@ -7,6 +7,7 @@
   "dataBaseUrl": "./data/",
   "gsiStdUrl": "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
   "gsiAttribution": "地理院タイル（国土地理院）",
+  "gsiAddressSearchUrl": "https://msearch.gsi.go.jp/address-search/AddressSearch",
   "defaultCenter": [139.75, 35.68],
   "defaultZoom": 5,
   "defaultZone": 9,

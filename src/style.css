@@ -181,6 +181,96 @@ body,
   font-weight: 600;
 }
 
+.address-search {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.address-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.address-search-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.address-search-row {
+  display: flex;
+  gap: 4px;
+  align-items: stretch;
+}
+
+.address-search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.address-search-submit,
+.address-search-go {
+  flex-shrink: 0;
+  padding: 5px 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  background: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #337ab7;
+  cursor: pointer;
+}
+
+.address-search-submit:hover,
+.address-search-go:hover {
+  background: rgba(51, 122, 183, 0.08);
+}
+
+.address-search-submit:disabled,
+.address-search-go:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.address-search-status {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: #555;
+  min-height: 0.9em;
+}
+
+.address-search-status.is-error {
+  color: #a33;
+}
+
+.address-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.address-search-results.hidden {
+  display: none;
+}
+
+.address-search-select {
+  width: 100%;
+  padding: 5px 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
 #legend {
   min-height: 0;
 }

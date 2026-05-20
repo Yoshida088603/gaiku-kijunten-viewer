@@ -23,6 +23,7 @@ import {
   type DownloadUiState,
 } from "@/ui/downloadButton";
 import { fallbackIconId, loadKijyuntenIcons } from "@/style/loadIcons";
+import { initAddressSearch } from "@/ui/addressSearch";
 import { renderLegend } from "@/ui/legend";
 import { initLegendPanelToggle } from "@/ui/legendPanel";
 import { applySiteBranding, initHelpDialog } from "@/ui/helpDialog";
@@ -33,6 +34,7 @@ async function main(): Promise<void> {
   const panelShell = document.getElementById("panel-shell");
   const panelToggle = document.getElementById("panel-toggle") as HTMLButtonElement | null;
   const legendEl = document.getElementById("legend");
+  const addressSearchEl = document.getElementById("address-search");
   const statusHint = document.getElementById("status-hint");
   const statusDetailsInner = document.getElementById("status-details-inner");
   const helpDialog = document.getElementById("help-dialog") as HTMLDialogElement | null;
@@ -49,6 +51,7 @@ async function main(): Promise<void> {
     !panelShell ||
     !panelToggle ||
     !legendEl ||
+    !addressSearchEl ||
     !statusHint ||
     !statusDetailsInner ||
     !helpDialog ||
@@ -140,6 +143,7 @@ async function main(): Promise<void> {
   );
 
   renderLegend(legendEl, styleConfig);
+  initAddressSearch(addressSearchEl, map, mapConfig);
   initLegendPanelToggle(panelShell, panelToggle);
 
   const AUTO_SWITCH_HYSTERESIS_METERS = 800;

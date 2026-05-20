@@ -37,6 +37,56 @@
           </header>
           <div id="panel-body" class="panel-body">
             <h2 class="legend-heading">凡例</h2>
+            <div id="address-search" class="address-search">
+              <form id="address-search-form" class="address-search-form">
+                <label class="address-search-label" for="address-search-input"
+                  >住所</label
+                >
+                <div class="address-search-row">
+                  <input
+                    id="address-search-input"
+                    class="address-search-input"
+                    type="search"
+                    name="q"
+                    autocomplete="street-address"
+                    placeholder="例: 東京都北区西ヶ原"
+                    enterkeyhint="search"
+                  />
+                  <button
+                    id="address-search-submit"
+                    class="address-search-submit"
+                    type="submit"
+                  >
+                    検索
+                  </button>
+                </div>
+              </form>
+              <p
+                id="address-search-status"
+                class="address-search-status"
+                role="status"
+                aria-live="polite"
+              ></p>
+              <div
+                id="address-search-results"
+                class="address-search-results hidden"
+              >
+                <label class="address-search-label" for="address-search-select"
+                  >候補</label
+                >
+                <select
+                  id="address-search-select"
+                  class="address-search-select"
+                ></select>
+                <button
+                  id="address-search-go"
+                  class="address-search-go"
+                  type="button"
+                >
+                  移動
+                </button>
+              </div>
+            </div>
             <div id="legend"></div>
             <footer class="panel-footer">
               <p id="panel-notice" class="panel-notice"></p>
