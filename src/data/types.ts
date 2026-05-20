@@ -11,12 +11,25 @@ export interface SiteHelpConfig {
   repoLabel: string;
 }
 
+/** 地図左下のお問い合わせ案内 */
+export interface SiteContactConfig {
+  /** ビュワー向け（X）の短い説明 */
+  viewerLine: string;
+  xUrl: string;
+  xLabel: string;
+  /** 原本データ向け（国土交通省）の短い説明 */
+  dataLine: string;
+  mlitUrl: string;
+  mlitLabel: string;
+}
+
 export interface SiteConfig {
   title: string;
   description: string;
   /** 凡例パネル下部に常時表示する短い注意書き */
   panelNotice?: string;
   help: SiteHelpConfig;
+  contact?: SiteContactConfig;
 }
 
 export interface MapConfig {

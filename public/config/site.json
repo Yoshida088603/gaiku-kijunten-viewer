@@ -52,5 +52,13 @@
     "dataSourceLabel": "G空間情報センター データセットページ",
     "repoUrl": "https://github.com/Yoshida088603/gaiku-kijunten-viewer",
     "repoLabel": "GitHub リポジトリ"
+  },
+  "contact": {
+    "viewerLine": "ビュワーの不具合・ご意見は",
+    "xUrl": "https://x.com/yoshidashirou",
+    "xLabel": "X @yoshidashirou",
+    "dataLine": "原本データの内容については答えかねます。",
+    "mlitUrl": "https://www.mlit.go.jp/totikukensaku/chiseki/index.html",
+    "mlitLabel": "国土交通省（地籍整備）へお問い合わせください"
   }
 }

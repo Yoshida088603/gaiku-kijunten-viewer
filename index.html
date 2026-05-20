@@ -36,7 +36,6 @@
             </button>
           </header>
           <div id="panel-body" class="panel-body">
-            <h2 class="legend-heading">凡例</h2>
             <div id="address-search" class="address-search">
               <form id="address-search-form" class="address-search-form">
                 <label class="address-search-label" for="address-search-input"
@@ -87,9 +86,9 @@
                 </button>
               </div>
             </div>
+            <h2 class="legend-heading">凡例</h2>
             <div id="legend"></div>
             <footer class="panel-footer">
-              <p id="panel-notice" class="panel-notice"></p>
               <button
                 id="help-open"
                 type="button"
@@ -98,6 +97,7 @@
               >
                 使い方
               </button>
+              <p id="panel-notice" class="panel-notice"></p>
             </footer>
           </div>
         </aside>
@@ -132,6 +132,11 @@
         <button id="download-btn" type="button" disabled>表示範囲をCSV</button>
         <span id="download-hint" class="download-hint"></span>
       </div>
+      <aside
+        id="contact-footer"
+        class="contact-footer hidden"
+        aria-label="お問い合わせ"
+      ></aside>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

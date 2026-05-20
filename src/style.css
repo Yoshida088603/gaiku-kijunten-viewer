@@ -135,10 +135,11 @@ body,
 }
 
 .panel-notice {
-  margin: 0 0 8px;
+  margin: 8px 0 0;
   font-size: 0.68rem;
   line-height: 1.4;
   color: #555;
+  text-align: center;
 }
 
 .panel-shell.is-collapsed .panel-title,
@@ -532,6 +533,43 @@ body,
   display: none;
 }
 
+.contact-footer {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  max-width: min(340px, calc(100vw - 100px));
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.68rem;
+  line-height: 1.45;
+  color: #444;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+}
+
+.contact-footer.hidden {
+  display: none;
+}
+
+.contact-footer-line {
+  margin: 0;
+}
+
+.contact-footer-line + .contact-footer-line {
+  margin-top: 4px;
+}
+
+.contact-footer a {
+  color: #337ab7;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contact-footer a:hover {
+  text-decoration: underline;
+}
+
 .maplibregl-ctrl-attrib {
   font-size: 0.7rem !important;
 }
@@ -575,5 +613,11 @@ body,
 
   .panel-shell.is-collapsed {
     width: auto;
+  }
+
+  .contact-footer {
+    max-width: min(280px, calc(100vw - 24px));
+    font-size: 0.64rem;
+    padding: 6px 8px;
   }
 }
