@@ -24,7 +24,7 @@ function buildGlyphSvg({ color, glyph, glyphColor = "#FFFFFF" }) {
     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\n' +
     `  <circle cx="12" cy="12" r="10" fill="${color}" stroke="#333333" stroke-width="0.6"/>\n` +
     `  <text x="12" y="16" text-anchor="middle" font-size="${fontSize}" font-weight="bold"\n` +
-    `        fill="${glyphColor}" font-family="MS Gothic, Meiryo, sans-serif">${glyph}</text>\n` +
+    `        fill="${glyphColor}" font-family="Noto Sans CJK JP, Noto Sans CJK SC, MS Gothic, Meiryo, sans-serif">${glyph}</text>\n` +
     "</svg>\n"
   );
 }

@@ -92,6 +92,8 @@ cd 15-overview-pipeline
 
 `main` への push で [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) が `npm run build` し `dist/` を公開します。
 
+地図シンボル用 PNG はビルド時に SVG をラスタ化して生成します。Linux / WSL でローカルビルドする場合は、日本語フォント（例: `fonts-noto-cjk`）がないと略字が正しく焼き込まれません。GitHub Actions では workflow 内で `fonts-noto-cjk` をインストールしています。
+
 PMTiles が大きい場合は **Git LFS** の利用を検討してください（1 ファイル 100MB 未満が目安）。
 
 ## リポジトリ構成
