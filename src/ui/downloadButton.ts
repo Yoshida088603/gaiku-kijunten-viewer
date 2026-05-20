@@ -33,7 +33,7 @@ export class DownloadButtonController {
     if (state === "locked") {
       this.btn.disabled = true;
       const z = opts.zoom ?? 0;
-      const minZ = opts.minZoom ?? 16;
+      const minZ = opts.minZoom ?? 14;
       this.hint.classList.add("is-locked");
       this.hint.textContent = `z${minZ}以上に拡大してください（現在 z${Math.round(z)}）`;
       return;

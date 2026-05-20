@@ -1,5 +1,5 @@
 /**
- * Headless test: CSV download enabled at z16+, locked below z16.
+ * Headless test: CSV download enabled at downloadMinZoom+, locked below.
  * Usage: node 40-debug/verify-download-zoom.mjs
  * Server: Vite :5173 or local :8765 (auto-detect)
  */
@@ -11,6 +11,7 @@ const CANDIDATES = [
 ];
 
 const TOKYO_CENTER = [139.75, 35.68];
+const MIN_ZOOM = 14;
 const errors = [];
 
 async function pickUrl() {
@@ -20,8 +21,10 @@ async function pickUrl() {
       const res = await fetch(`${origin}/config/map.json`);
       if (!res.ok) continue;
       const cfg = await res.json();
-      if (cfg.downloadMinZoom !== 16) {
-        console.error(`map.json downloadMinZoom=${cfg.downloadMinZoom}, expected 16`);
+      if (cfg.downloadMinZoom !== MIN_ZOOM) {
+        console.error(
+          `map.json downloadMinZoom=${cfg.downloadMinZoom}, expected ${MIN_ZOOM}`,
+        );
         return null;
       }
       return base;
@@ -75,8 +78,10 @@ const setView = async (zoom) => {
   await page.waitForTimeout(1500);
 };
 
-// detail 表示 + タイル読込（自動 flyTo は z5 のままのため手動で z13+ へ）
-await setView(15.9);
+const belowZoom = MIN_ZOOM - 0.1;
+const atZoom = MIN_ZOOM;
+
+await setView(belowZoom);
 
 await page.waitForFunction(
   () => {
@@ -88,31 +93,47 @@ await page.waitForFunction(
 
 const low = await page.evaluate(() => window.__gaikuViewerTest.getDownloadUi());
 const zoomLow = await page.evaluate(() => window.__gaikuViewerTest.getZoom());
-console.log("z15.9:", low, "mapZoom:", zoomLow.toFixed(2));
-assert(zoomLow < 16, `expected zoom < 16, got ${zoomLow}`);
+console.log(`z${belowZoom}:`, low, "mapZoom:", zoomLow.toFixed(2));
+assert(zoomLow < MIN_ZOOM, `expected zoom < ${MIN_ZOOM}, got ${zoomLow}`);
 assert(!low.wrapHidden, "download wrap should be visible with detail");
-assert(low.btnDisabled, "button must be disabled below z16");
-assert(/z16以上に拡大/.test(low.hint), `locked hint: ${low.hint}`);
-assert(/z16以上でDL可/.test(low.statusDl), `status: ${low.statusDl}`);
+assert(low.btnDisabled, `button must be disabled below z${MIN_ZOOM}`);
+assert(
+  new RegExp(`z${MIN_ZOOM}以上に拡大`).test(low.hint),
+  `locked hint: ${low.hint}`,
+);
+assert(
+  new RegExp(`z${MIN_ZOOM}以上でDL可`).test(low.statusDl),
+  `status: ${low.statusDl}`,
+);
 
-await setView(16);
+await setView(atZoom);
 
 await page.waitForFunction(
-  () => {
+  ({ minZ }) => {
     const ui = window.__gaikuViewerTest.getDownloadUi();
     const z = window.__gaikuViewerTest.getZoom();
-    return z >= 15.99 && !ui.btnDisabled;
+    return z >= minZ - 0.01 && !ui.btnDisabled;
   },
+  { minZ: MIN_ZOOM },
   { timeout: 45_000 },
 );
 
 const high = await page.evaluate(() => window.__gaikuViewerTest.getDownloadUi());
 const zoomHigh = await page.evaluate(() => window.__gaikuViewerTest.getZoom());
-console.log("z16:", high, "mapZoom:", zoomHigh.toFixed(2));
-assert(zoomHigh >= 15.99, `map zoom should be >=16, got ${zoomHigh}`);
-assert(!high.wrapHidden, "download wrap visible at z16");
-assert(!/z16以上に拡大/.test(high.hint), `should not show locked hint: ${high.hint}`);
-assert(high.btnDisabled === false, `CSV download must be enabled at z16: ${high.hint}`);
+console.log(`z${atZoom}:`, high, "mapZoom:", zoomHigh.toFixed(2));
+assert(
+  zoomHigh >= MIN_ZOOM - 0.01,
+  `map zoom should be >=${MIN_ZOOM}, got ${zoomHigh}`,
+);
+assert(!high.wrapHidden, `download wrap visible at z${MIN_ZOOM}`);
+assert(
+  !new RegExp(`z${MIN_ZOOM}以上に拡大`).test(high.hint),
+  `should not show locked hint: ${high.hint}`,
+);
+assert(
+  high.btnDisabled === false,
+  `CSV download must be enabled at z${MIN_ZOOM}: ${high.hint}`,
+);
 assert(
   /表示範囲.*点/.test(high.statusDl) || /点をダウンロード/.test(high.hint),
   `DL ready: status=${high.statusDl} hint=${high.hint}`,
@@ -124,5 +145,7 @@ const critical = errors.filter(
 if (critical.length) console.warn("console errors:", critical.slice(0, 5));
 
 await browser.close();
-console.log("PASS: download locked below z16, enabled at z16+");
+console.log(
+  `PASS: download locked below z${MIN_ZOOM}, enabled at z${MIN_ZOOM}+`,
+);
 process.exit(0);
