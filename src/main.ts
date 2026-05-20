@@ -324,6 +324,44 @@ async function main(): Promise<void> {
     ].join("");
   }
 
+  const e2eEnabled =
+    import.meta.env.DEV || new URLSearchParams(location.search).has("e2e");
+  if (e2eEnabled) {
+    const testApi = {
+      getZoom: (): number => map.getZoom(),
+      async setZoom(zoom: number, center?: [number, number]): Promise<void> {
+        await new Promise<void>((resolve) => {
+          map.once("idle", () => resolve());
+          map.jumpTo({
+            zoom,
+            center: center ?? map.getCenter(),
+          });
+        });
+        await new Promise((r) => setTimeout(r, 400));
+        updateVisibility();
+      },
+      getDownloadUi(): {
+        wrapHidden: boolean;
+        btnDisabled: boolean;
+        hint: string;
+        statusDl: string;
+        downloadMinZoom: number;
+      } {
+        const status = statusBar!.innerText;
+        const dlLine = status.split("\n").find((l) => l.startsWith("DL:")) ?? "";
+        return {
+          wrapHidden: downloadWrap.classList.contains("hidden"),
+          btnDisabled: downloadBtn.disabled,
+          hint: downloadHint.textContent?.trim() ?? "",
+          statusDl: dlLine,
+          downloadMinZoom: mapConfig.downloadMinZoom,
+        };
+      },
+    };
+    (window as unknown as { __gaikuViewerTest?: typeof testApi }).__gaikuViewerTest =
+      testApi;
+  }
+
   const defaultKey = zoneLayers.find(
     (z) => z.zone === mapConfig.defaultZone && z.sokuti === "2011",
   );

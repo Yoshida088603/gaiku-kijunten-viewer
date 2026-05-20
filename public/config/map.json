@@ -2,7 +2,7 @@
   "detailMinScale": 47816,
   "downloadMinScale": 2988,
   "detailMinZoom": 13,
-  "downloadMinZoom": 17,
+  "downloadMinZoom": 16,
   "overviewMaxZoom": 13,
   "dataBaseUrl": "./data/",
   "gsiStdUrl": "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
