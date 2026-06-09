@@ -15,6 +15,13 @@ function escapeCsvField(s: string): string {
   return s;
 }
 
+/** 数学座標系（北=x, 東=y）→ 測量座標系（東=x, 北=y）へ値だけ入替 */
+function cellValue(row: KijyuntenFeatureProps, col: string): unknown {
+  if (col === "x") return row.y;
+  if (col === "y") return row.x;
+  return row[col as keyof KijyuntenFeatureProps];
+}
+
 export function featuresToCsv(
   rows: KijyuntenFeatureProps[],
   columns: string[],
@@ -22,7 +29,7 @@ export function featuresToCsv(
   const header = columns.join(",");
   const body = rows.map((row) =>
     columns
-      .map((col) => escapeCsvField(formatCell(col, row[col as keyof KijyuntenFeatureProps])))
+      .map((col) => escapeCsvField(formatCell(col, cellValue(row, col))))
       .join(","),
   );
   return [header, ...body].join("\r\n");
