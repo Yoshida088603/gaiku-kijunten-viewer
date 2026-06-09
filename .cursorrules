@@ -1,0 +1,30 @@
+## Git コミットメッセージ（必須）
+
+ソース管理パネルの「Generate Commit Message」（✨ボタン）を含め、**すべてのコミットメッセージは必ず日本語**で書くこと。英語のみのメッセージは禁止。
+
+### 形式
+
+- 1行目: `<種類>(<scope>): <日本語の簡潔な説明>`
+  - 種類: `feat`, `fix`, `docs`, `refactor`, `test`, `chore` など（英語可）
+  - scope: 任意（例: `ui`, `csv`, `mobile`）
+  - **コロン以降は必ず日本語**
+- 本文（任意）: 変更の理由を日本語で1〜2文、または箇条書き
+
+### 良い例
+
+```
+feat(csv): CSV出力時にx/yを測量座標系へ入れ替え
+
+feat(ui): ダウンロードボタンに件数表示、ラベルに「CSVでダウンロード」を表示
+
+docs: READMEにCSV座標変換とUI文言を追記
+
+fix(mobile): 住所入力時のページ拡大とレイアウト崩れを防止
+```
+
+### 禁止例（出力しないこと）
+
+```
+fix(ui): update download button text for clarity
+feat(csv): swap x and y coordinates in CSV export
+```

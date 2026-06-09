@@ -518,6 +518,7 @@ body,
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
   background: #337ab7;
   color: #fff;

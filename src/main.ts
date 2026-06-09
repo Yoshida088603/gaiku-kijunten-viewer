@@ -357,6 +357,7 @@ async function main(): Promise<void> {
       getDownloadUi(): {
         wrapHidden: boolean;
         btnDisabled: boolean;
+        btnText: string;
         hint: string;
         statusDl: string;
         downloadMinZoom: number;
@@ -373,6 +374,7 @@ async function main(): Promise<void> {
         return {
           wrapHidden: downloadWrap.classList.contains("hidden"),
           btnDisabled: downloadBtn.disabled,
+          btnText: downloadBtn.textContent?.trim() ?? "",
           hint: downloadHint.textContent?.trim() ?? "",
           statusDl: dlLine,
           downloadMinZoom: mapConfig.downloadMinZoom,

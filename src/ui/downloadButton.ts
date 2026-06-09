@@ -34,6 +34,7 @@ export class DownloadButtonController {
       this.btn.disabled = true;
       const z = opts.zoom ?? 0;
       const minZ = opts.minZoom ?? 14;
+      this.btn.textContent = "表示範囲をダウンロード";
       this.hint.classList.add("is-locked");
       this.hint.textContent = `z${minZ}以上に拡大してください（現在 z${Math.round(z)}）`;
       return;
@@ -41,14 +42,20 @@ export class DownloadButtonController {
 
     if (state === "empty") {
       this.btn.disabled = true;
-      this.hint.textContent = "表示範囲に点がありません";
+      this.btn.textContent = "表示範囲に点がありません";
+      this.hint.textContent = "CSVでダウンロード";
       return;
     }
 
     const n = opts.count ?? this.getRowsInView().length;
     this.btn.disabled = n === 0;
-    this.hint.textContent =
-      n > 0 ? `表示範囲の ${n} 点をダウンロード` : "表示範囲に点がありません";
+    if (n > 0) {
+      this.btn.textContent = `表示範囲の ${n} 点をダウンロード`;
+      this.hint.textContent = "CSVでダウンロード";
+    } else {
+      this.btn.textContent = "表示範囲に点がありません";
+      this.hint.textContent = "CSVでダウンロード";
+    }
   }
 
   private onDownload(): void {

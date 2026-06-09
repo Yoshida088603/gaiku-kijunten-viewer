@@ -1,0 +1,35 @@
+---
+description: Git コミットメッセージは常に日本語で書く
+alwaysApply: true
+---
+
+# コミットメッセージ（日本語）
+
+このリポジトリでコミットを作成・提案するとき、**メッセージ本文は必ず日本語**で書く。英語のみのメッセージは使わない。
+
+**注意:** ソース管理の ✨「Generate Commit Message」は `.cursor/rules` ではなく **プロジェクト直下の `.cursorrules`** のみ参照する（Cursor 公式フォーラムの仕様）。両方に同じ方針を書いてある。
+
+## 形式
+
+- 先頭の Conventional Commits プレフィックス（`feat`, `fix`, `docs` など）は英語のままでよい
+- **コロン以降の説明は日本語**にする
+- 1〜2文で「なぜ」を簡潔に書く
+
+## 例
+
+```
+feat(csv): CSV出力時にx/yを測量座標系へ入れ替え
+
+feat(ui): ダウンロードボタンに件数表示、ラベルに「CSVでダウンロード」を表示
+
+docs: READMEにCSV座標変換とUI文言を追記
+
+fix(mobile): 住所入力時のページ拡大とレイアウト崩れを防止
+```
+
+## 避ける例
+
+```
+feat(csv): swap x and y coordinates in CSV export
+fix: restore overview in manifest
+```

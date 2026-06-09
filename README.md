@@ -15,13 +15,14 @@
 - 右上パネルにサイト名・**使い方**（ダイアログ）・凡例
 - 使い方の文言は [`public/config/site.json`](public/config/site.json) で編集可能（データ出典・注意事項・操作説明）
 - 左上に短い操作案内（拡大・CSV の誘導）。技術情報は「詳細（ズーム・レイヤ）」で折りたたみ表示
+- 右下の CSV ダウンロード: 青ボタンに件数（例「表示範囲の 120 点をダウンロード」）、その下の白抜きラベルに「CSVでダウンロード」。z14 未満はボタン無効で拡大案内を表示
 
 ## 機能
 
 - 国土地理院タイル（標準地図）背景
 - **overview**（広域・占有グリッド fill・z0–13、z13 で detail とラップ）と **detail**（実点・z13–17）の縮尺連動切替
 - 平面直角系（測地成果2011 等）ごとの PMTiles 読込（`manifest.json` 駆動）
-- z14 以上で表示範囲内の detail 点を CSV ダウンロード（z14 未満はボタン無効・拡大を案内）。出力列は `public/config/map.json` の `csvColumns` に従う（`name`, `x`, `y`, `z`, `kind`, `dataset_name_ja`, `data_system`, `sokuti`, `zone`, `epsg`, `yohosei`, `id`）。`name` はデータ系ごとの名称列から抽出し、`dataset_name_ja` / `data_system` で街区・都市官民などを判別できる
+- z14 以上で表示範囲内の detail 点を CSV ダウンロード（z14 未満はボタン無効・拡大を案内）。UI 文言は [`src/ui/downloadButton.ts`](src/ui/downloadButton.ts) で状態に応じて切替（ready: ボタン `表示範囲の N 点をダウンロード` / ラベル `CSVでダウンロード`）。出力列は `public/config/map.json` の `csvColumns` に従う（`name`, `x`, `y`, `z`, `kind`, `dataset_name_ja`, `data_system`, `sokuti`, `zone`, `epsg`, `yohosei`, `id`）。`name` はデータ系ごとの名称列から抽出し、`dataset_name_ja` / `data_system` で街区・都市官民などを判別できる
 - CSV の `x` / `y` はダウンロード時に **数学座標系 → 測量座標系** へ値だけ入れ替える（列名はそのまま）。PMTiles 内は数学座標系（x＝北、y＝東）、CSV 出力は測量座標系（x＝東、y＝北）。実装: [`src/lib/csvExport.ts`](src/lib/csvExport.ts) の `cellValue()`
 - 凡例（QGIS スタイル準拠の色分け・5 表示クラス）
 - detail 表示時のシンボル・凡例アイコンは [`10_pipeline/60-csv2geopackage/styles/glyphs/`](../../60-csv2geopackage/styles/glyphs/) の SVG を使用（QGIS QML と同型）

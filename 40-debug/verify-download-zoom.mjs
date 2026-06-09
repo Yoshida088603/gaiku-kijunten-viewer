@@ -132,11 +132,19 @@ assert(
 );
 assert(
   high.btnDisabled === false,
-  `CSV download must be enabled at z${MIN_ZOOM}: ${high.hint}`,
+  `CSV download must be enabled at z${MIN_ZOOM}: btn=${high.btnText}`,
 );
 assert(
-  /CSV: 表示範囲 \d+ 点/.test(high.statusDl) || /点をダウンロード/.test(high.hint),
-  `CSV ready: status=${high.statusDl} hint=${high.hint}`,
+  /点をダウンロード/.test(high.btnText),
+  `CSV ready button: ${high.btnText}`,
+);
+assert(
+  high.hint === "CSVでダウンロード",
+  `CSV ready hint: ${high.hint}`,
+);
+assert(
+  /CSV: 表示範囲 \d+ 点/.test(high.statusDl),
+  `CSV ready status: ${high.statusDl}`,
 );
 
 const critical = errors.filter(
