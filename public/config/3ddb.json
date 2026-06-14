@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "apiBaseUrl": "https://gsvrg.ipri.aist.go.jp/3ddb_demo/api/v1",
+  "copcViewerBaseUrl": "https://yoshida088603.github.io/potree-copc-viewer/",
+  "maxFeatures": 400,
+  "debounceMs": 400
+}

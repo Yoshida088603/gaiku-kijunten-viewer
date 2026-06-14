@@ -1,3 +1,4 @@
+import type { DddbConfig } from "@/3ddb/types";
 import type { KijyuntenStyleConfig, MapConfig } from "@/data/types";
 
 const base = import.meta.env.BASE_URL;
@@ -25,4 +26,10 @@ export async function loadStyleConfig(): Promise<KijyuntenStyleConfig> {
   const res = await fetch(configUrl("config/kijyunten-style.json"));
   if (!res.ok) throw new Error(`kijyunten-style.json: ${res.status}`);
   return res.json() as Promise<KijyuntenStyleConfig>;
+}
+
+export async function load3ddbConfig(): Promise<DddbConfig> {
+  const res = await fetch(configUrl("config/3ddb.json"));
+  if (!res.ok) throw new Error(`3ddb.json: ${res.status}`);
+  return res.json() as Promise<DddbConfig>;
 }
