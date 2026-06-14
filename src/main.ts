@@ -1,7 +1,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 
-import { loadMapConfig, loadStyleConfig } from "@/config/loadConfig";
+import { loadMapConfig, loadStyleConfig, load3ddbConfig } from "@/config/loadConfig";
 import { loadSiteConfig } from "@/config/loadSiteConfig";
 import {
   fetchManifest,
@@ -30,6 +30,7 @@ import { initLegendPanelToggle } from "@/ui/legendPanel";
 import { applyContactFooter } from "@/ui/contactFooter";
 import { applySiteBranding, initHelpDialog } from "@/ui/helpDialog";
 import { renderStatusBar, type StatusBarContext } from "@/ui/statusBar";
+import { DddbCatalogController } from "@/3ddb/controller";
 
 async function main(): Promise<void> {
   ensureMobileViewport();
@@ -47,6 +48,7 @@ async function main(): Promise<void> {
   const helpBody = document.getElementById("help-dialog-body");
   const banner = document.getElementById("banner");
   const downloadWrap = document.getElementById("download-wrap");
+  const bottomRightStack = document.getElementById("bottom-right-stack");
   const downloadBtn = document.getElementById("download-btn") as HTMLButtonElement;
   const downloadHint = document.getElementById("download-hint");
 
@@ -64,6 +66,7 @@ async function main(): Promise<void> {
     !helpBody ||
     !banner ||
     !downloadWrap ||
+    !bottomRightStack ||
     !downloadBtn ||
     !downloadHint
   ) {
@@ -73,16 +76,17 @@ async function main(): Promise<void> {
   const hintEl: HTMLElement = statusHint;
   const detailsEl: HTMLElement = statusDetailsInner;
 
-  const [mapConfig, styleConfig, siteConfig] = await Promise.all([
+  const [mapConfig, styleConfig, siteConfig, dddbConfig] = await Promise.all([
     loadMapConfig(),
     loadStyleConfig(),
     loadSiteConfig(),
+    load3ddbConfig(),
   ]);
 
   applySiteBranding(siteConfig);
   applyContactFooter(siteConfig);
   initMobileBottomChrome(
-    downloadWrap,
+    bottomRightStack,
     document.getElementById("contact-footer"),
   );
   initHelpDialog(helpDialog, helpOpen, helpClose, helpBody, siteConfig);
@@ -150,6 +154,10 @@ async function main(): Promise<void> {
     () => layerManager.queryRenderedDetailInView(),
     mapConfig.csvColumns,
   );
+
+  const dddbCtrl = dddbConfig.enabled
+    ? new DddbCatalogController(map, dddbConfig, bottomRightStack)
+    : null;
 
   renderLegend(legendEl, styleConfig);
   initAddressSearch(addressSearchEl, map, mapConfig);
@@ -327,6 +335,11 @@ async function main(): Promise<void> {
     }
     downloadCtrl.setState(dlState, dlOpts);
 
+    if (dddbCtrl) {
+      const dddbActive = showDetail && downloadZoomOk;
+      dddbCtrl.setActive(dddbActive);
+    }
+
     const statusCtx: StatusBarContext = {
       zoom,
       mapConfig,
@@ -380,6 +393,26 @@ async function main(): Promise<void> {
           downloadMinZoom: mapConfig.downloadMinZoom,
         };
       },
+      get3ddbUi(): {
+        wrapHidden: boolean;
+        optionCount: number;
+        selectedRegId: number | null;
+        toggleChecked: boolean;
+        statusText: string;
+        downloadLabel: string;
+      } {
+        if (!dddbCtrl) {
+          return {
+            wrapHidden: true,
+            optionCount: 0,
+            selectedRegId: null,
+            toggleChecked: true,
+            statusText: "",
+            downloadLabel: "",
+          };
+        }
+        return dddbCtrl.getUiState();
+      },
     };
     (window as unknown as { __gaikuViewerTest?: typeof testApi }).__gaikuViewerTest =
       testApi;
@@ -400,6 +433,14 @@ async function main(): Promise<void> {
 
   map.on("moveend", () => {
     updateVisibility();
+    if (dddbCtrl) {
+      const zoom = map.getZoom();
+      const zoomOk = zoom >= mapConfig.detailMinZoom - 0.01;
+      const downloadZoomOk = zoom >= mapConfig.downloadMinZoom - 0.01;
+      if (currentZone && zoomOk && downloadZoomOk) {
+        dddbCtrl.scheduleRefresh();
+      }
+    }
     void maybeAutoSwitchZoneByCenter();
   });
   map.on("zoomend", updateVisibility);
