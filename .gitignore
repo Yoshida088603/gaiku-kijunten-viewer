@@ -11,4 +11,8 @@ __pycache__/
 20-data/_tmp_sql/
 20-data/*.log
 40-debug/*.har
+00-temp/*
+!00-temp/plam.md
+!00-temp/plan-3ddb.md
+!00-temp/cloud-agent-prompt.md
 public/icons/icon-*.png
