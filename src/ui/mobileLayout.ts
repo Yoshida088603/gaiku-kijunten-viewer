@@ -41,15 +41,15 @@ export function lockPageScroll(): void {
 }
 
 export function initMobileBottomChrome(
-  downloadWrap: HTMLElement,
-  contactFooter: HTMLElement | null,
+  bottomRightStack: HTMLElement,
+  bottomLeftStack: HTMLElement | null,
 ): void {
   if (!isTouchUi()) return;
 
   document.documentElement.classList.add("touch-ui");
   lockPageScroll();
 
-  const targets = [downloadWrap, contactFooter].filter(
+  const targets = [bottomRightStack, bottomLeftStack].filter(
     (el): el is HTMLElement => el !== null,
   );
 

@@ -155,12 +155,38 @@ body,
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.panel-notice {
-  margin: 8px 0 0;
-  font-size: 0.68rem;
-  line-height: 1.4;
-  color: #555;
-  text-align: center;
+.legend-heading {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.legend-section > .legend-heading {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.legend-section > .legend-heading::-webkit-details-marker {
+  display: none;
+}
+
+.legend-section > .legend-heading::before {
+  content: "▶ ";
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+.legend-section[open] > .legend-heading::before {
+  content: "▼ ";
+}
+
+.legend-section {
+  margin-top: 2px;
+}
+
+.legend-section[open] #legend {
+  margin-top: 6px;
 }
 
 .panel-shell.is-collapsed .panel-title,
@@ -195,12 +221,6 @@ body,
 .field select {
   padding: 6px 8px;
   font-size: max(16px, 0.85rem);
-}
-
-.legend-heading {
-  margin: 0 0 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
 }
 
 .address-search {
@@ -497,11 +517,31 @@ body,
   color: #337ab7;
 }
 
-.download-wrap {
+.bottom-left-stack {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: min(360px, calc(100vw - 24px));
+}
+
+.bottom-right-stack {
   position: absolute;
   right: 12px;
   bottom: 12px;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: min(360px, calc(100vw - 24px));
+}
+
+.download-wrap {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -547,6 +587,124 @@ body,
   font-weight: 500;
 }
 
+.ddb-catalog-wrap {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-size: 0.82rem;
+  min-width: 200px;
+  max-width: min(360px, calc(100vw - 24px));
+}
+
+.ddb-catalog-wrap:not([open]) {
+  padding: 6px 10px;
+}
+
+.ddb-catalog-wrap.hidden {
+  display: none;
+}
+
+.ddb-catalog-summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #1e293b;
+  user-select: none;
+}
+
+.ddb-catalog-summary::-webkit-details-marker {
+  display: none;
+}
+
+.ddb-catalog-summary::before {
+  content: "▶ ";
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+.ddb-catalog-wrap[open] > .ddb-catalog-summary::before {
+  content: "▼ ";
+}
+
+.ddb-catalog-summary-meta {
+  font-weight: 500;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.ddb-catalog-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.ddb-catalog-heading {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #1e293b;
+}
+
+.ddb-catalog-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ddb-catalog-toggle-label {
+  font-size: 0.78rem;
+  color: #475569;
+  cursor: pointer;
+}
+
+.ddb-catalog-select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  background: #fff;
+}
+
+.ddb-catalog-download-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #059669;
+  color: #fff;
+}
+
+.ddb-catalog-download-btn:disabled {
+  background: #9aa9b8;
+  cursor: not-allowed;
+}
+
+.ddb-catalog-download-btn:not(:disabled):hover {
+  background: #047857;
+}
+
+.ddb-catalog-status {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.ddb-catalog-disclaimer {
+  margin: 0;
+  font-size: 0.65rem;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
 .banner {
   padding: 8px 12px;
   border-radius: 6px;
@@ -561,10 +719,7 @@ body,
 }
 
 .contact-footer {
-  position: absolute;
-  left: 12px;
-  bottom: 12px;
-  z-index: 2;
+  position: static;
   max-width: min(340px, calc(100vw - 100px));
   padding: 8px 10px;
   border-radius: 6px;
@@ -608,8 +763,8 @@ body,
     font-size: 16px;
   }
 
-  .download-wrap,
-  .contact-footer {
+  .bottom-right-stack,
+  .bottom-left-stack {
     position: fixed;
   }
 }

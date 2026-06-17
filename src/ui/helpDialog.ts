@@ -36,12 +36,6 @@ export function applySiteBranding(site: SiteConfig): void {
   if (meta) meta.setAttribute("content", site.description);
   const titleEl = document.getElementById("panel-title");
   if (titleEl) titleEl.textContent = site.title;
-  const noticeEl = document.getElementById("panel-notice");
-  if (noticeEl) {
-    const text = site.panelNotice?.trim() ?? "";
-    noticeEl.textContent = text;
-    noticeEl.hidden = text.length === 0;
-  }
 }
 
 export function initHelpDialog(

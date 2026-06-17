@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "apiBaseUrl": "https://gsvrg.ipri.aist.go.jp/3ddb_demo/api/v1",
+  "copcViewerBaseUrl": "https://yoshida088603.github.io/potree-copc-viewer/",
+  "maxFeatures": 400,
+  "debounceMs": 400,
+  "disclaimerJa": "3DDB API利用時は産総研の利用規約・免責事項が適用されます。"
+}

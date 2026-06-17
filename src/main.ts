@@ -1,7 +1,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 
-import { loadMapConfig, loadStyleConfig } from "@/config/loadConfig";
+import { loadMapConfig, loadStyleConfig, load3ddbConfig } from "@/config/loadConfig";
 import { loadSiteConfig } from "@/config/loadSiteConfig";
 import {
   fetchManifest,
@@ -18,6 +18,7 @@ import {
 import type { LogicalZoneLayer } from "@/data/types";
 import { createBaseMap } from "@/map/createMap";
 import { LayerManager } from "@/map/layerManager";
+import { isDetailZoom, isDownloadZoom } from "@/map/zoomThreshold";
 import {
   DownloadButtonController,
   type DownloadUiState,
@@ -30,6 +31,8 @@ import { initLegendPanelToggle } from "@/ui/legendPanel";
 import { applyContactFooter } from "@/ui/contactFooter";
 import { applySiteBranding, initHelpDialog } from "@/ui/helpDialog";
 import { renderStatusBar, type StatusBarContext } from "@/ui/statusBar";
+import { DddbCatalogController } from "@/3ddb/controller";
+import { installGaikuViewerTestApi } from "@/debug/gaikuViewerTestApi";
 
 async function main(): Promise<void> {
   ensureMobileViewport();
@@ -47,6 +50,8 @@ async function main(): Promise<void> {
   const helpBody = document.getElementById("help-dialog-body");
   const banner = document.getElementById("banner");
   const downloadWrap = document.getElementById("download-wrap");
+  const bottomRightStack = document.getElementById("bottom-right-stack");
+  const bottomLeftStack = document.getElementById("bottom-left-stack");
   const downloadBtn = document.getElementById("download-btn") as HTMLButtonElement;
   const downloadHint = document.getElementById("download-hint");
 
@@ -64,6 +69,8 @@ async function main(): Promise<void> {
     !helpBody ||
     !banner ||
     !downloadWrap ||
+    !bottomRightStack ||
+    !bottomLeftStack ||
     !downloadBtn ||
     !downloadHint
   ) {
@@ -73,18 +80,16 @@ async function main(): Promise<void> {
   const hintEl: HTMLElement = statusHint;
   const detailsEl: HTMLElement = statusDetailsInner;
 
-  const [mapConfig, styleConfig, siteConfig] = await Promise.all([
+  const [mapConfig, styleConfig, siteConfig, dddbConfig] = await Promise.all([
     loadMapConfig(),
     loadStyleConfig(),
     loadSiteConfig(),
+    load3ddbConfig(),
   ]);
 
   applySiteBranding(siteConfig);
   applyContactFooter(siteConfig);
-  initMobileBottomChrome(
-    downloadWrap,
-    document.getElementById("contact-footer"),
-  );
+  initMobileBottomChrome(bottomRightStack, bottomLeftStack);
   initHelpDialog(helpDialog, helpOpen, helpClose, helpBody, siteConfig);
 
   const map = createBaseMap(mapEl, mapConfig);
@@ -150,6 +155,10 @@ async function main(): Promise<void> {
     () => layerManager.queryRenderedDetailInView(),
     mapConfig.csvColumns,
   );
+
+  const dddbCtrl = dddbConfig.enabled
+    ? new DddbCatalogController(map, dddbConfig, bottomLeftStack)
+    : null;
 
   renderLegend(legendEl, styleConfig);
   initAddressSearch(addressSearchEl, map, mapConfig);
@@ -274,7 +283,7 @@ async function main(): Promise<void> {
 
   async function maybeAutoSwitchZoneByCenter(): Promise<void> {
     if (zoneApplyInProgress) return;
-    const zoomOk = map.getZoom() >= mapConfig.detailMinZoom - 0.01;
+    const zoomOk = isDetailZoom(map.getZoom(), mapConfig.detailMinZoom);
     if (!zoomOk) return;
     const center = map.getCenter();
     const next = detectZoneFromCenter(center.lng, center.lat);
@@ -286,9 +295,9 @@ async function main(): Promise<void> {
   function updateVisibility(): void {
     const hasOverview = overview !== null;
     const zoom = map.getZoom();
-    const zoomOk = zoom >= mapConfig.detailMinZoom - 0.01;
+    const zoomOk = isDetailZoom(zoom, mapConfig.detailMinZoom);
     const showDetail = currentZone !== null && zoomOk;
-    const downloadZoomOk = zoom >= mapConfig.downloadMinZoom - 0.01;
+    const downloadZoomOk = isDownloadZoom(zoom, mapConfig.downloadMinZoom);
 
     layerManager.setOverviewVisible(hasOverview);
     if (hasOverview) {
@@ -327,6 +336,11 @@ async function main(): Promise<void> {
     }
     downloadCtrl.setState(dlState, dlOpts);
 
+    if (dddbCtrl) {
+      const dddbActive = showDetail && downloadZoomOk;
+      dddbCtrl.setActive(dddbActive);
+    }
+
     const statusCtx: StatusBarContext = {
       zoom,
       mapConfig,
@@ -341,48 +355,15 @@ async function main(): Promise<void> {
   const e2eEnabled =
     import.meta.env.DEV || new URLSearchParams(location.search).has("e2e");
   if (e2eEnabled) {
-    const testApi = {
-      getZoom: (): number => map.getZoom(),
-      async setZoom(zoom: number, center?: [number, number]): Promise<void> {
-        await new Promise<void>((resolve) => {
-          map.once("idle", () => resolve());
-          map.jumpTo({
-            zoom,
-            center: center ?? map.getCenter(),
-          });
-        });
-        await new Promise((r) => setTimeout(r, 400));
-        updateVisibility();
-      },
-      getDownloadUi(): {
-        wrapHidden: boolean;
-        btnDisabled: boolean;
-        btnText: string;
-        hint: string;
-        statusDl: string;
-        downloadMinZoom: number;
-      } {
-        const status =
-          document.getElementById("status-details-inner")?.textContent ?? "";
-        const dlLine =
-          status
-            .split(/\r?\n/)
-            .map((l) => l.trim())
-            .find((l) => l.startsWith("CSV:")) ??
-          [...status.matchAll(/CSV:[^\n]*/g)].pop()?.[0] ??
-          "";
-        return {
-          wrapHidden: downloadWrap.classList.contains("hidden"),
-          btnDisabled: downloadBtn.disabled,
-          btnText: downloadBtn.textContent?.trim() ?? "",
-          hint: downloadHint.textContent?.trim() ?? "",
-          statusDl: dlLine,
-          downloadMinZoom: mapConfig.downloadMinZoom,
-        };
-      },
-    };
-    (window as unknown as { __gaikuViewerTest?: typeof testApi }).__gaikuViewerTest =
-      testApi;
+    installGaikuViewerTestApi({
+      map,
+      mapConfig,
+      downloadWrap,
+      downloadBtn,
+      downloadHint,
+      dddbCtrl,
+      updateVisibility,
+    });
   }
 
   const defaultKey = zoneLayers.find(
@@ -400,13 +381,14 @@ async function main(): Promise<void> {
 
   map.on("moveend", () => {
     updateVisibility();
+    dddbCtrl?.scheduleRefresh();
     void maybeAutoSwitchZoneByCenter();
   });
   map.on("zoomend", updateVisibility);
   map.on("idle", updateVisibility);
 
   map.on("mousemove", (e) => {
-    const zoomOk = map.getZoom() >= mapConfig.detailMinZoom - 0.01;
+    const zoomOk = isDetailZoom(map.getZoom(), mapConfig.detailMinZoom);
     if (!zoomOk || !currentZone) {
       map.getCanvas().style.cursor = "";
       return;

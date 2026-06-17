@@ -94,8 +94,10 @@
                 </button>
               </div>
             </div>
-            <h2 class="legend-heading">凡例</h2>
-            <div id="legend"></div>
+            <details id="legend-section" class="legend-section">
+              <summary class="legend-heading">凡例</summary>
+              <div id="legend"></div>
+            </details>
             <footer class="panel-footer">
               <button
                 id="help-open"
@@ -103,9 +105,8 @@
                 class="panel-help-btn"
                 aria-haspopup="dialog"
               >
-                使い方
+                使い方・免責事項
               </button>
-              <p id="panel-notice" class="panel-notice"></p>
             </footer>
           </div>
         </aside>
@@ -113,7 +114,7 @@
       <dialog id="help-dialog" class="help-dialog" aria-labelledby="help-dialog-title">
         <div class="help-dialog-inner">
           <header class="help-dialog-header">
-            <h2 id="help-dialog-title">使い方</h2>
+            <h2 id="help-dialog-title">使い方・免責事項</h2>
             <button
               id="help-close"
               type="button"
@@ -136,15 +137,19 @@
           </details>
         </div>
       </div>
-      <div id="download-wrap" class="download-wrap hidden">
-        <button id="download-btn" type="button" disabled>表示範囲をダウンロード</button>
-        <span id="download-hint" class="download-hint"></span>
+      <div id="bottom-left-stack" class="bottom-left-stack">
+        <aside
+          id="contact-footer"
+          class="contact-footer hidden"
+          aria-label="お問い合わせ"
+        ></aside>
       </div>
-      <aside
-        id="contact-footer"
-        class="contact-footer hidden"
-        aria-label="お問い合わせ"
-      ></aside>
+      <div id="bottom-right-stack" class="bottom-right-stack">
+        <div id="download-wrap" class="download-wrap hidden">
+          <button id="download-btn" type="button" disabled>表示範囲をダウンロード</button>
+          <span id="download-hint" class="download-hint"></span>
+        </div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

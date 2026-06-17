@@ -16,6 +16,7 @@
 - 使い方の文言は [`public/config/site.json`](public/config/site.json) で編集可能（データ出典・注意事項・操作説明）
 - 左上に短い操作案内（拡大・CSV の誘導）。技術情報は「詳細（ズーム・レイヤ）」で折りたたみ表示
 - 右下の CSV ダウンロード: 青ボタンに件数（例「表示範囲の 120 点をダウンロード」）、その下の白抜きラベルに「CSVでダウンロード」。z14 未満はボタン無効で拡大案内を表示
+- 左下の **3DDBデータ** カタログ: z14 以上で表示範囲内の産総研 3DDB データを一覧。パネルを展開し「範囲表示」をオンにすると地図上にハッチ表示。ZIP ダウンロード・COPC ビューア・外部リンクへ遷移可能
 
 ## 機能
 
@@ -26,6 +27,7 @@
 - CSV の `x` / `y` はダウンロード時に **数学座標系 → 測量座標系** へ値だけ入れ替える（列名はそのまま）。PMTiles 内は数学座標系（x＝北、y＝東）、CSV 出力は測量座標系（x＝東、y＝北）。実装: [`src/lib/csvExport.ts`](src/lib/csvExport.ts) の `cellValue()`
 - 凡例（QGIS スタイル準拠の色分け・5 表示クラス）
 - detail 表示時のシンボル・凡例アイコンは [`10_pipeline/60-csv2geopackage/styles/glyphs/`](../../60-csv2geopackage/styles/glyphs/) の SVG を使用（QGIS QML と同型）
+- **3DDB データカタログ**（z14 以上）: 産総研 3DDB API から表示範囲内の点群・CityGML 等を取得し、左下パネルに一覧表示。範囲表示トグルで地図上に fill／line で重ね表示（`service_name` ごとに色分け）。設定は [`public/config/3ddb.json`](public/config/3ddb.json)、実装は [`src/3ddb/`](src/3ddb/)
 
 ## ローカル開発
 
@@ -46,6 +48,15 @@ npm run preview
 ```
 
 `dist/data/` に `20-data` がコピーされます。
+
+### 自動検証（Playwright）
+
+```powershell
+npm run test:download-zoom
+npm run test:3ddb-catalog
+```
+
+開発サーバ（`npm run dev`）または本番同等サーバ（`npm run serve:local`）が起動している必要があります。
 
 ### 本番同等のローカル確認
 
@@ -110,7 +121,7 @@ PMTiles が大きい場合は **Git LFS** の利用を検討してください�
 ```text
 gaiku-kijunten-viewer/
 ├── src/                 # MapLibre アプリ
-├── public/config/       # site.json（サイト名・使い方）, map.json, 凡例色
+├── public/config/       # site.json（サイト名・使い方）, map.json, 3ddb.json, 凡例色
 ├── 10-pipeline/         # GPKG → detail PMTiles
 ├── 15-overview-pipeline/
 ├── 20-data/             # manifest + PMTiles

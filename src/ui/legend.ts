@@ -4,6 +4,16 @@ import { sortedCategories } from "@/style/kindDisplayMap";
 /** 凡例マーカーは文字数・地図シンボル倍率に関係なく同一サイズ */
 const LEGEND_MARKER_PX = 32;
 
+const LEGEND_LAST_LABEL = "補助点";
+
+/** 凡例表示用: 補助点のみ末尾へ（地図の order / アイコン ID は変えない） */
+function sortedLegendCategories(style: KijyuntenStyleConfig): StyleCategory[] {
+  const cats = sortedCategories(style);
+  const last = cats.filter((c) => c.label === LEGEND_LAST_LABEL);
+  const rest = cats.filter((c) => c.label !== LEGEND_LAST_LABEL);
+  return [...rest, ...last];
+}
+
 /**
  * 凡例は外部画像に依存しない（DOM で色＋字形を描画）。
  * 地図は 5 表示クラスに集約、凡例も 5 行。
@@ -14,7 +24,7 @@ export function renderLegend(
 ): void {
   container.innerHTML = "";
 
-  for (const cat of sortedCategories(style)) {
+  for (const cat of sortedLegendCategories(style)) {
     container.appendChild(legendItem(cat));
   }
 }
